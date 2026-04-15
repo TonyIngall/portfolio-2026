@@ -24,11 +24,14 @@ import Layout from '../layouts/Layout.astro';
         display: grid;
         grid-template-columns: repeat(9, 1fr);
         grid-template-rows: 1fr auto 4fr;
+        gap: 15px;
         padding: 0 33px;
+        height: 100vh;
 
         #title {
             grid-column: 1 / span 9;
             grid-row: 3 / span 1;
+            align-self: end;
             order: 99;
             h1 {
                 display: flex;
