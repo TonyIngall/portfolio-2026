@@ -12,6 +12,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@swup/astro": "^1.8.0",
     "astro": "^6.1.6",
     "gsap": "^3.15.0",
     "swup": "^4.8.3"
