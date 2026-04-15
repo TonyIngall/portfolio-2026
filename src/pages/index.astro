@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Insights from '../components/home/insights.astro';
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
@@ -12,8 +13,12 @@ import Layout from '../layouts/Layout.astro';
         </div>
         <div id="info">
             <p>Developer since 2020.</p>
-            <p>Based in Cambridgeshire.</p>
             <p>Focusing on Motion & Accessibility.</p>
+            <p>Based in Cambridgeshire.</p>
+        </div>
+        <div id="insights">
+            <h2>Insights</h2>
+            <Insights />
         </div>
     </main>
 </Layout>
@@ -66,6 +71,40 @@ import Layout from '../layouts/Layout.astro';
                 }
             }
         }
+
+        #info {
+            order: 1;
+            grid-column: 1 / span 5;
+            grid-row: 2 / span 1;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            p {
+                font-size: 1.5rem;
+                &:nth-child(1) {
+                    grid-column: 1 / span 2;
+                }
+                &:nth-child(2) {
+                    grid-column: 3 / span 2;
+                }
+                &:nth-child(3) {
+                    grid-column: 1 / span 2;
+                    grid-row: 2 / span 1;
+                }
+            }
+        }
+
+        #insights {
+            order: 2;
+            grid-column: 6 / span 4;
+            grid-row: 2 / span 1;
+            h2 {
+                font-family: 'PP-Editorial-New-Ultrabold';
+                text-transform: uppercase;
+                font-size: 1.5rem;
+                line-height: 1;
+            }
+        }
     }
 
     /* ═════ Tablet ═════ */
@@ -77,10 +116,24 @@ import Layout from '../layouts/Layout.astro';
 
             #title {
                 grid-column: 1 / span 5;
-                grid-row: 1 / span 1;
+                grid-row: 3 / span 1;
                 h1 {
                     font-size: min(13.5vw, 8.5rem);
                 }
+            }
+
+            #info {
+                grid-column: 1 / span 5;
+                grid-row: 2 / span 1;
+                grid-template-columns: repeat(5, 1fr);
+                p:nth-child(2) {
+                    grid-column: 4 / span 2;
+                }
+            }
+
+            #insights {
+                grid-column: 1 / span 5;
+                grid-row: 3 / span 1;
             }
         }
     }
@@ -90,7 +143,7 @@ import Layout from '../layouts/Layout.astro';
             grid-template-columns: 1fr;
 
             #title {
-                grid-column: 1 / span 1;
+                grid-column: 3 / span 1;
                 h1 {
                     font-size: min(11.5vw, 5.5rem);
                 }
