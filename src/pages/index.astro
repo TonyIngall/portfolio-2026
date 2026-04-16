@@ -1,9 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Insights from '../components/home/insights.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
@@ -20,6 +17,9 @@ import Insights from '../components/home/insights.astro';
             <h2>Insights</h2>
             <Insights />
         </div>
+        <div id="pattern">
+            <div class="grid"></div>
+        </div>
     </main>
 </Layout>
 
@@ -32,6 +32,7 @@ import Insights from '../components/home/insights.astro';
         gap: 15px;
         padding: 0 33px;
         height: 100vh;
+        overflow: hidden;
 
         #title {
             grid-column: 1 / span 9;
@@ -47,28 +48,8 @@ import Insights from '../components/home/insights.astro';
                 text-transform: uppercase;
                 color: var(--color-dark);
                 margin: 1.25rem 0 0 0;
-            }
-        }
-
-        #info {
-            order: 1;
-            grid-column: 1 / span 5;
-            grid-row: 2 / span 1;
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
-            p {
-                font-size: 1.5rem;
-                &:nth-child(1) {
-                    grid-column: 1 / span 2;
-                }
-                &:nth-child(2) {
-                    grid-column: 3 / span 2;
-                }
-                &:nth-child(3) {
-                    grid-column: 1 / span 2;
-                    grid-row: 2 / span 1;
-                }
+                position: relative;
+                z-index: 1;
             }
         }
 
@@ -105,6 +86,31 @@ import Insights from '../components/home/insights.astro';
                 line-height: 1;
             }
         }
+
+        #pattern {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            .grid {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                width: 50%;
+                aspect-ratio: 1/1;
+                transform: translate(25%, 40%);
+                border-radius: 100%;
+                box-shadow: inset 0 0 33px var(--color-light);
+                background-image: 
+                    linear-gradient(to right, #312b3614 1px, transparent 1px),
+                    linear-gradient(to bottom, #312b3614 1px, transparent 1px);
+                background-size: 33px 33px;
+                background-position: center;
+            }
+        }
     }
 
     /* ═════ Tablet ═════ */
@@ -135,6 +141,13 @@ import Insights from '../components/home/insights.astro';
                 grid-column: 1 / span 5;
                 grid-row: 3 / span 1;
             }
+
+            #pattern {
+                .grid {
+                    width: 66%;
+                    transform: translate(12.5%, 25%);
+                }
+            }
         }
     }
     /* ═════ Mobile ═════ */
@@ -146,6 +159,13 @@ import Insights from '../components/home/insights.astro';
                 grid-column: 3 / span 1;
                 h1 {
                     font-size: min(11.5vw, 5.5rem);
+                }
+            }
+            #pattern {
+                .grid {
+                    right: 50%;
+                    width: 100%;
+                    transform: translate(50%, 33%);
                 }
             }
         }
