@@ -1,67 +1,9 @@
 ---
+import type { Article, ArticlesResponse, Category } from '../../types/articles';
 
 const api = import.meta.env.PUBLIC_STRAPI_URL
 const response = await fetch(api + 'articles?sort[0]=publishedAt:desc&populate[categories][populate][0]=colour&populate[series][populate][0]=colour&limit=3').then((response) => response.json()) as ArticlesResponse;
 const articles = response.data;
-
-interface Colour {
-    id: number;
-    documentId: string;
-    name: string;
-    hex: string;
-    createdAt: string;
-    updatedAt: string;
-    publishedAt: string;
-}
-
-interface Category {
-    id: number;
-    documentId: string;
-    name: string;
-    slug: string;
-    description: string | null;
-    createdAt: string;
-    updatedAt: string;
-    publishedAt: string;
-    colour: Colour;
-}
-
-interface Series {
-    id: number;
-    documentId: string;
-    title: string;
-    slug: string;
-    createdAt: string;
-    updatedAt: string;
-    publishedAt: string;
-    locale: string;
-    colour: Colour;
-}
-
-interface Article {
-    id: number;
-    documentId: string;
-    title: string;
-    description: string | null;
-    slug: string;
-    createdAt: string;
-    updatedAt: string;
-    publishedAt: string;
-    categories: Category[];
-    series: Series | null;
-}
-
-interface ArticlesResponse {
-    data: Article[];
-    meta: {
-        pagination: {
-            page: number;
-            pageSize: number;
-            pageCount: number;
-            total: number;
-        };
-    };
-}
 ---
 
 <ul>
