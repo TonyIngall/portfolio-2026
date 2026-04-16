@@ -1,0 +1,18 @@
+---
+import type { Article, ArticlesResponse, Category } from '../../types/articles';
+
+export function getStaticPaths() {
+    const api = import.meta.env.PUBLIC_STRAPI_URL
+    const response = fetch(api + 'articles').then((response) => response.json()) as Promise<ArticlesResponse>;
+
+    return response.then((data) => {
+        const articles = data.data;
+        return articles.map((article: Article) => ({
+            params: { slug: article.slug },
+        }));
+    });
+}
+
+const { slug } = Astro.params;
+---
+<h1>{slug}</h1>
