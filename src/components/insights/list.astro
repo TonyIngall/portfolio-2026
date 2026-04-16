@@ -21,3 +21,31 @@ const articles = response.data;
         </li>
     ))}
 </ul>
+
+<style>
+    ul {
+        padding-left: 0px;
+        li {
+            list-style: none;
+            a {
+                width: 100%;
+                display: flex;
+                flex-flow: row nowrap;
+                align-items: center;
+                gap: 15px;
+                text-decoration: none;
+                color: var(--color-dark);
+                .category {
+                    border: 1px solid var(--cat-color);
+                    padding: 0.33rem 1.12rem;
+                    border-radius: 33px;
+                }
+                .series {
+                    border: 1px solid var(--series-color);
+                    padding: 0.33rem 1.12rem;
+                    border-radius: 33px;
+                }
+            }
+        }
+    }
+</style>
