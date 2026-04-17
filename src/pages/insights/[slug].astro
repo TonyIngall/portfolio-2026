@@ -63,7 +63,7 @@ const { slug } = Astro.params;
             color: var(--color-dark);
             font-family: 'PP-Editorial-New-Ultrabold';
             line-height: 1;
-            will-change: font-size, transform;
+            will-change: font-size, line-height, transform;
         }
         #loader-title {
             position: absolute;
@@ -71,11 +71,33 @@ const { slug } = Astro.params;
             left: 0;
             width: 100%;
             height: 100%;
+            padding: 50px 33px;
             display: flex;
             align-items: center;
             justify-content: center;
             h1 {
                 font-size: 11.5vw;
+                line-height: 1.15;
+                opacity: 0;
+            }
+            .word {
+                position: relative;
+                display: inline-block;
+                opacity: 1;
+                width: fit-content;
+                .wrap {
+                    opacity: 0;
+                }
+                .overlay {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    transform-origin: bottom center;
+                    transform: scale(1, 0);
+                    background: var(--color-primary);
+                }
             }
         }
         #meta {
@@ -106,12 +128,69 @@ const { slug } = Astro.params;
 <script>
     import { gsap } from 'gsap';
     import { Flip } from 'gsap/Flip';
+    import { SplitText } from 'gsap/SplitText';
     
-    gsap.registerPlugin(Flip);
+    gsap.registerPlugin(Flip, SplitText);
     
     const loaderTitle = document.getElementById('loader-title');
     const title = document.querySelector('#meta #title');
     const h1 = document.querySelector('#loader-title h1');
+
+    const BlockTitle = () => {
+        if(!loaderTitle || !h1) return;
+        const split = new SplitText(h1, {
+            type: 'words',
+            wordsClass: 'word',
+            onSplit: (self) => {
+                gsap.set(h1, { opacity: 1 });
+                self.words.forEach((word) => {
+                    const content = word.innerHTML;
+                    word.innerHTML = "";
+
+                    const wrap = document.createElement("div");
+                    wrap.classList.add("wrap");
+                    wrap.innerHTML = content;
+
+                    const overlay = document.createElement("div");
+                    overlay.classList.add("overlay");
+
+                    word.append(wrap, overlay);
+                });
+
+                const tl = gsap.timeline();
+
+                self.words.forEach((word, i) => {
+                const wrap = word.querySelector(".wrap");
+                const overlay = word.querySelector(".overlay");
+
+                const wordTl = gsap.timeline({});
+
+                wordTl
+                    .to(word, {
+                        opacity: 1,
+                        duration: 0.1
+                    })
+                    .to(overlay, {
+                        scaleY: 1,
+                        ease: "power1.in",
+                        duration: 0.33
+                    })
+                    .set(wrap, { opacity: 1 })
+                    .to(
+                        overlay,
+                        {
+                            height: "0%",
+                            ease: "power3.out",
+                            duration: 0.33
+                        },
+                        "<=+0.06"
+                    );
+
+                    tl.add(wordTl, "<=" + 0.25);
+                });
+            }
+        });
+    }
 
     const FlipTitle = () => {
         if(!loaderTitle || !title || !h1) return;
@@ -130,6 +209,9 @@ const { slug } = Astro.params;
         });
     }
     window.addEventListener('load', () => {
-        FlipTitle();
+        BlockTitle();
+        setTimeout(() => {
+            FlipTitle();
+        }, 2000);
     });
 </script>
