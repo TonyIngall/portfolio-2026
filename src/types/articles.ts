@@ -32,6 +32,12 @@ export interface Series {
     colour: Colour;
 }
 
+export interface Blocks {
+    id: number;
+    __component: string;
+    body: string;
+}
+
 export interface Article {
     id: number;
     documentId: string;
@@ -43,6 +49,7 @@ export interface Article {
     publishedAt: string;
     categories: Category[];
     series: Series | null;
+    blocks: Blocks[];
 }
 
 interface Pagination {
