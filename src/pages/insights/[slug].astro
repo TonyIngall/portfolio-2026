@@ -3,6 +3,10 @@ import Layout from '../../layouts/Layout.astro';
 import RichText from '../../components/content/RichText.astro';
 import type { Article, ArticlesResponse, Category } from '../../types/articles';
 
+import { gsap } from 'gsap';
+import { Flip } from 'gsap/Flip';
+
+// Fetch Article
 const api = import.meta.env.PUBLIC_STRAPI_URL
 
 export function getStaticPaths() {
@@ -20,26 +24,112 @@ export function getStaticPaths() {
 const response = await fetch(api + `articles?filters[slug]=${Astro.params.slug}&populate[blocks][populate]=*&populate[categories][populate][0]=colour&populate[series][populate][0]=colour`).then((response) => response.json()) as ArticlesResponse;
 const article = response.data[0];
 
-console.log(article)
-
 const { slug } = Astro.params;
 ---
 <Layout title={article.title} description={article.description}>
-    <article>
-        <h1>{article.title}</h1>
-        <div class="category">
-            {article.categories && article.categories.map((category: Category) => (
-                <span class="category" style={`--cat-color: ${category.colour.hex}`}>{category.name}</span>
-            ))}
+    <article id="insight">
+        <div id="loader-title">
+            <h1>{article.title}</h1>
         </div>
-        {article.series && <span class="series" style={`--series-color: ${article.series.colour.hex}`}>{article.series?.title}</span>}
+        <div id="meta">
+            <div id="title">
+            </div>
+            <div id="categories">
+                {article.categories.map((category: Category) => (
+                    <span class="category" style={`--cat-color: ${category.colour.hex};`}>{category.name}</span>
+                ))}
+            </div>
+            <div id="series">
+                {article.series && (
+                    <span class="series" style={`--series-color: ${article.series.colour.hex};`}>{article.series.title}</span>
+                )}
+            </div>
+        </div>
         <div class="content">
             {article.blocks.map((block) => {
                 if (block.__component === 'shared.rich-text') {
-                    return <RichText content={block.body} />;
+                    return <RichText content={block.body} class="article-text" />;
                 }
                 return null;
             })}
         </div>
     </article>
 </Layout>
+
+<style>
+    #insight {
+        padding: 50px 33px;
+        h1 {
+            color: var(--color-dark);
+            font-family: 'PP-Editorial-New-Ultrabold';
+            line-height: 1;
+            will-change: font-size, transform;
+        }
+        #loader-title {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            h1 {
+                font-size: 11.5vw;
+            }
+        }
+        #meta {
+            #title {
+                font-size: 4.5rem;
+                color: var(--color-dark);
+            }
+            #categories {
+                opacity: 0;
+            }
+            #series {
+                opacity: 0;
+            }
+        }
+        .content {
+            opacity: 0;
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--color-dark);
+            .article-text {
+                p {
+                    font-size: 18px;
+                }
+            }
+        }
+    }
+</style>
+<script>
+    import { gsap } from 'gsap';
+    import { Flip } from 'gsap/Flip';
+    
+    gsap.registerPlugin(Flip);
+    
+    const loaderTitle = document.getElementById('loader-title');
+    const title = document.querySelector('#meta #title');
+    const h1 = document.querySelector('#loader-title h1');
+
+    const FlipTitle = () => {
+        if(!loaderTitle || !title || !h1) return;
+        const state = Flip.getState(h1, { props: 'font-size,transform' });
+        title.appendChild(h1);
+
+        Flip.from(state, {
+            duration: 1,
+            delay: 0.15,
+            ease: 'power3.out',
+            absoluteOnLeave: true,
+            onComplete: () => {
+                gsap.to(['.content', '#categories', '#series'], { opacity: 1, duration: 0.33 });
+                loaderTitle.style.display = 'none';
+            }
+        });
+    }
+    window.addEventListener('load', () => {
+        FlipTitle();
+    });
+</script>
