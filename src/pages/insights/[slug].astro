@@ -1,4 +1,6 @@
 ---
+import Layout from '../../layouts/Layout.astro';
+import RichText from '../../components/content/RichText.astro';
 import type { Article, ArticlesResponse, Category } from '../../types/articles';
 
 const api = import.meta.env.PUBLIC_STRAPI_URL
@@ -18,7 +20,26 @@ export function getStaticPaths() {
 const response = await fetch(api + `articles?filters[slug]=${Astro.params.slug}&populate[blocks][populate]=*&populate[categories][populate][0]=colour&populate[series][populate][0]=colour`).then((response) => response.json()) as ArticlesResponse;
 const article = response.data[0];
 
+console.log(article)
+
 const { slug } = Astro.params;
 ---
-<h1>{slug}</h1>
-<p>{article.title}</p>
+<Layout title={article.title} description={article.description}>
+    <article>
+        <h1>{article.title}</h1>
+        <div class="category">
+            {article.categories && article.categories.map((category: Category) => (
+                <span class="category" style={`--cat-color: ${category.colour.hex}`}>{category.name}</span>
+            ))}
+        </div>
+        {article.series && <span class="series" style={`--series-color: ${article.series.colour.hex}`}>{article.series?.title}</span>}
+        <div class="content">
+            {article.blocks.map((block) => {
+                if (block.__component === 'shared.rich-text') {
+                    return <RichText content={block.body} />;
+                }
+                return null;
+            })}
+        </div>
+    </article>
+</Layout>
