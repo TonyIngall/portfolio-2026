@@ -1,11 +1,11 @@
 ---
 import { marked } from 'marked';
 
-const { content } = Astro.props;
+const { content, class: className, ...rest } = Astro.props;
 const htmlContent = marked.parse(content);
 ---
 
-<div class="text-content" set:html={htmlContent}>
+<div class:list={['text-content', className]} set:html={htmlContent} {...rest}>
 </div>
 
 <style>
