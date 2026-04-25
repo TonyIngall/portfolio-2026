@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import RichText from '../../components/content/RichText.astro';
+import CopyLink from '../../components/insights/copy-link.astro';
 import type { Article, ArticlesResponse, Category } from '../../types/articles';
 
 import { gsap } from 'gsap';
@@ -70,6 +71,7 @@ const url = `${site_url}/insights/${slug}`;
             </div>
             <div class="bottom">
                 <p>Or just copy a link!</p>
+                <CopyLink link={url} />
             </div>
         </section>
         <section id="next">
@@ -174,6 +176,7 @@ const url = `${site_url}/insights/${slug}`;
             color: var(--color-dark);
         }
         section {
+            position: relative;
             border: 1px solid var(--color-dark);
             padding: 50px 33px 30px 33px;
             border-radius: 33px;
@@ -195,6 +198,14 @@ const url = `${site_url}/insights/${slug}`;
                 }
                 .bottom {
                     margin-top: 50px;
+                    display: flex;
+                    flex-flow: column nowrap;
+                    gap: 15px;
+                    .copy-link {
+                        position: absolute;
+                        bottom: -25px;
+                        right: 33px;
+                    }
                 }
             }
             &#next, &#previous {
