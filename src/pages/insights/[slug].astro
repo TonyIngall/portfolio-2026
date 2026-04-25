@@ -25,6 +25,8 @@ const response = await fetch(api + `articles?filters[slug]=${Astro.params.slug}&
 const article = response.data[0];
 
 const { slug } = Astro.params;
+const site_url = import.meta.env.PUBLIC_SITE_URL
+const url = `${site_url}/insights/${slug}`;
 ---
 <Layout title={article.title} description={article.description}>
     <article id="insight">
@@ -54,6 +56,29 @@ const { slug } = Astro.params;
             })}
         </div>
     </article>
+    <div id="end">
+        <section id="share">
+            <div class="top">
+                <h2>Did you enjoy this insight?</h2>
+                <p>It always helps to share valuable content. If you found this to be helpful, interesting or anything in-between - then please share this insight page with the helpful buttons below.</p>
+            </div>
+            <div class="links">
+                <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${url}`} target="_blank" rel="noopener noreferrer">Share on LinkedIn</a>
+                <a href={`https://twitter.com/intent/tweet?url=${url}&text=${article.title}`} target="_blank" rel="noopener noreferrer">Share on Twitter</a>
+                <a href={`https://www.facebook.com/sharer/sharer.php?u=${url}`} target="_blank" rel="noopener noreferrer">Share on Facebook</a>
+                <a href={`https://www.reddit.com/submit?url=${url}&title=${article.title}`} target="_blank" rel="noopener noreferrer">Share on Reddit</a>
+            </div>
+            <div class="bottom">
+                <p>Or just copy a link!</p>
+            </div>
+        </section>
+        <section id="next">
+            <h2>Next insight</h2>
+        </section>
+        <section id="previous">
+            <h2>Previous insight</h2>
+        </section>
+    </div>
 </Layout>
 
 <style>
@@ -113,15 +138,15 @@ const { slug } = Astro.params;
                     line-height: 1.15;
                 }
             }
-            #categories {
+            /* #categories {
                 opacity: 0;
             }
             #series {
                 opacity: 0;
-            }
+            } */
         }
         .content {
-            opacity: 0;
+            /* opacity: 0; */
             max-width: 800px;
             margin: 0 auto;
             color: var(--color-dark);
@@ -129,6 +154,51 @@ const { slug } = Astro.params;
                 p {
                     font-size: 18px;
                 }
+            }
+        }
+    }
+
+    #end {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 66px;
+        row-gap: 33px;
+        padding: 100px 33px;
+        h2 {
+            font-family: 'PP-Editorial-New-Ultrabold';
+            font-size: 2.5rem;
+            color: var(--color-dark);
+        }
+        p {
+            font-size: 18px;
+            color: var(--color-dark);
+        }
+        section {
+            border: 1px solid var(--color-dark);
+            padding: 50px 33px 30px 33px;
+            border-radius: 33px;
+            &#share {
+                display: flex;
+                justify-content: space-between;
+                flex-flow: column nowrap;
+                gap: 15px;
+                grid-row: span 2;
+                .top {
+                    display: flex;
+                    flex-flow: column nowrap;
+                    gap: 15px;
+                }
+                .links {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 15px;
+                }
+                .bottom {
+                    margin-top: 50px;
+                }
+            }
+            &#next, &#previous {
+
             }
         }
     }
@@ -233,9 +303,10 @@ const { slug } = Astro.params;
         });
     }
     window.addEventListener('load', () => {
-        BlockTitle();
+        /* BlockTitle();
         setTimeout(() => {
             FlipTitle();
-        }, 2000);
+        }, 2000); */
+        FlipTitle();
     });
 </script>
