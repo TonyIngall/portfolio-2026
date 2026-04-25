@@ -1,0 +1,66 @@
+<header>
+    <div>
+        <p>TI</p>
+        <div id="menu-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect y="4" width="24" height="2" fill="#312B36"/>
+                <rect y="11" width="24" height="2" fill="#312B36"/>
+                <rect y="18" width="24" height="2" fill="#312B36"/>
+            </svg>
+        </div>
+    </div>
+    <nav>
+        <div class="nav-inner">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/insights">Insights</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<style>
+    header {
+        position: fixed;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        > div {
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 33px;
+            margin: 0 auto;
+            padding: 15px 33px;
+            width: 33vw;
+            max-width: 66vw;
+            border-radius: 33px;
+            box-shadow: 0px 6px 6px 6px rgba(239, 229, 231, 0.66);
+            #menu-icon {
+                cursor: pointer;
+                height: 24px;
+            }
+        }
+    }
+    nav {
+        width: 0px;
+        .nav-inner {
+            padding: 15px 33px;
+            border-radius: 33px;
+            box-shadow: 0px 6px 6px 6px rgba(239, 229, 231, 0.66);
+        }
+        ul {
+            padding: 0px;
+            li {
+                list-style: none;
+            }
+        }
+    }
+</style>
+<script>
+    import { gsap } from 'gsap';
+    const menuIcon = document.getElementById('menu-icon');
+    const nav = document.querySelector('nav');
+    let menuOpen = false;
+</script>

@@ -1,6 +1,6 @@
 ---
 const { title, description } = Astro.props;
-
+import Header from '../components/ui/header.astro';
 ---
 
 <!doctype html>
@@ -14,6 +14,7 @@ const { title, description } = Astro.props;
 		<meta name="description" content={description} />
 	</head>
 	<body>
+		<Header />
 		<slot />
 	</body>
 </html>

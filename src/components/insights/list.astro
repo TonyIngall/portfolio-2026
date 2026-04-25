@@ -2,7 +2,7 @@
 import type { Article, ArticlesResponse, Category } from '../../types/articles';
 
 const api = import.meta.env.PUBLIC_STRAPI_URL
-const response = await fetch(api + 'articles?sort[0]=publishedAt:desc&populate[categories][populate][0]=colour&populate[series][populate][0]=colour&limit=3').then((response) => response.json()) as ArticlesResponse;
+const response = await fetch(api + 'articles?sort[0]=publishedAt:desc&populate[categories][populate][0]=colour&populate[series][populate][0]=colour').then((response) => response.json()) as ArticlesResponse;
 const articles = response.data;
 ---
 
@@ -24,26 +24,25 @@ const articles = response.data;
 
 <style>
     ul {
-        list-style: none;
-        padding: 0;
+        padding-left: 0px;
         li {
-            margin-bottom: 1rem;
+            list-style: none;
             a {
+                width: 100%;
                 display: flex;
-                align-items: center;
                 flex-flow: row nowrap;
+                align-items: center;
                 gap: 15px;
                 text-decoration: none;
-                font-size: 1.25rem;
                 color: var(--color-dark);
                 .category {
-                    padding: 0.33rem 1.12rem;
                     border: 1px solid var(--cat-color);
+                    padding: 0.33rem 1.12rem;
                     border-radius: 33px;
                 }
                 .series {
-                    padding: 0.33rem 1.12rem;
                     border: 1px solid var(--series-color);
+                    padding: 0.33rem 1.12rem;
                     border-radius: 33px;
                 }
             }
