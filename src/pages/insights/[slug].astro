@@ -34,20 +34,38 @@ const url = `${site_url}/insights/${slug}`;
         <div id="loader-title">
             <h1>{article.title}</h1>
         </div>
-        <div id="meta">
+        <section id="top">
             <div id="title">
             </div>
-            <div id="categories">
-                {article.categories.map((category: Category) => (
-                    <span class="category" style={`--cat-color: ${category.colour.hex};`}>{category.name}</span>
-                ))}
+            <div id="meta">
+                <div id="series">
+                    Series:
+                    {article.series && (
+                        <span class="series" style={`--series-color: ${article.series.colour.hex};`}>{article.series.title}</span>
+                    )}
+                </div>
+                <div id="categories">
+                    {article.categories && article.categories.length > 0 && (
+                        <>
+                            <p style={{ marginRight: '10px' }}>Topics Covered:</p>
+                            <div class="categories">
+                                {article.categories.map((category: Category) => (
+                                    <span class="category" style={`--cat-color: ${category.colour.hex};`}>{category.name}</span>
+                                ))}
+                            </div>
+                        </>
+                    )}
+                </div>
+                <div id="date">
+                    Published on
+                    {new Date(article.publishedAt).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                    })}
+                </div>
             </div>
-            <div id="series">
-                {article.series && (
-                    <span class="series" style={`--series-color: ${article.series.colour.hex};`}>{article.series.title}</span>
-                )}
-            </div>
-        </div>
+        </section>
         <div class="content">
             {article.blocks.map((block) => {
                 if (block.__component === 'shared.rich-text') {
@@ -85,8 +103,10 @@ const url = `${site_url}/insights/${slug}`;
 
 <style>
     #insight {
+        position: relative;
         padding: 50px 33px;
         h1 {
+            text-wrap: balance;
             color: var(--color-dark);
             font-family: 'PP-Editorial-New-Ultrabold';
             line-height: 1;
@@ -128,7 +148,10 @@ const url = `${site_url}/insights/${slug}`;
                 }
             }
         }
-        #meta {
+        #top {
+            display: grid;
+            grid-template-columns: 1fr 20%;
+            margin-bottom: 50px;
             #title {
                 display: flex;
                 align-items: center;
@@ -140,15 +163,20 @@ const url = `${site_url}/insights/${slug}`;
                     line-height: 1.15;
                 }
             }
-            /* #categories {
+            #meta {
                 opacity: 0;
+                color: var(--color-dark);
+                font-size: 18px;
+                #categories {
+                }
+                #series {
+                }
+                #date {
+                }
             }
-            #series {
-                opacity: 0;
-            } */
         }
         .content {
-            /* opacity: 0; */
+            opacity: 0;
             max-width: 800px;
             margin: 0 auto;
             color: var(--color-dark);
@@ -161,6 +189,7 @@ const url = `${site_url}/insights/${slug}`;
     }
 
     #end {
+        opacity: 0;
         display: grid;
         grid-template-columns: 1fr 1fr;
         column-gap: 66px;
@@ -238,7 +267,7 @@ const url = `${site_url}/insights/${slug}`;
     gsap.registerPlugin(Flip, SplitText);
     
     const loaderTitle = document.getElementById('loader-title');
-    const title = document.querySelector('#meta #title');
+    const title = document.querySelector('#title');
     const h1 = document.querySelector('#loader-title h1');
 
     const BlockTitle = () => {
@@ -308,16 +337,15 @@ const url = `${site_url}/insights/${slug}`;
             ease: 'power3.out',
             absoluteOnLeave: true,
             onComplete: () => {
-                gsap.to(['.content', '#categories', '#series'], { opacity: 1, duration: 0.33 });
+                gsap.to(['.content', '#meta', '#end'], { opacity: 1, duration: 0.33 });
                 loaderTitle.style.display = 'none';
             }
         });
     }
     window.addEventListener('load', () => {
-        /* BlockTitle();
+        BlockTitle();
         setTimeout(() => {
             FlipTitle();
-        }, 2000); */
-        FlipTitle();
+        }, 2000);
     });
 </script>
