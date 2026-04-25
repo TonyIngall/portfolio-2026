@@ -76,6 +76,7 @@ const { slug } = Astro.params;
             align-items: center;
             justify-content: center;
             h1 {
+                text-wrap: balance;
                 font-size: 11.5vw;
                 line-height: 1.15;
                 opacity: 0;
@@ -102,8 +103,15 @@ const { slug } = Astro.params;
         }
         #meta {
             #title {
-                font-size: 4.5rem;
-                color: var(--color-dark);
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                h1 {
+                    text-wrap: balance;
+                    font-size: 4.5rem;
+                    color: var(--color-dark);
+                    line-height: 1.15;
+                }
             }
             #categories {
                 opacity: 0;
@@ -120,6 +128,22 @@ const { slug } = Astro.params;
             .article-text {
                 p {
                     font-size: 18px;
+                }
+            }
+        }
+    }
+
+    @media screen and (max-width: 1024px) {
+        #insight {
+            padding: 50px 15px;
+            #loader-title {
+                h1 {
+                    font-size: 5rem;
+                }
+            }
+            #meta {
+                #title h1 {
+                    font-size: 4rem;
                 }
             }
         }
