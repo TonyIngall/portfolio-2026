@@ -1,3 +1,7 @@
+---
+import Icon from "./Icon.astro"
+---
+
 <header>
     <div>
         <p>TI</p>
@@ -11,10 +15,29 @@
     </div>
     <nav>
         <div class="nav-inner">
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/insights">Insights</a></li>
-            </ul>
+            <div id="pages">
+                <p>Pages</p>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/insights">Insights</a></li>
+                </ul>
+            </div>
+            <div id="contact">
+                <p>Say <a href="mailto:hello@tonyingall.com">Hello<span>@tonyingall.com</span></a></p>
+            </div>
+            <div id="socials">
+                <p>See also:</p>
+                <ul>
+                    <li><a href="https://www.linkedin.com/in/tony-ingall/">
+                        <span>LinkedIn</span>
+                        <Icon name="linkedin" />
+                    </a></li>
+                    <li><a href="https://www.github.com/tonyingall">
+                        <span>GitHub</span>
+                        <Icon name="github" />
+                    </a></li>
+                </ul>
+            </div>
         </div>
     </nav>
 </header>
@@ -33,7 +56,7 @@
             gap: 33px;
             margin: 0 auto;
             padding: 15px 33px;
-            width: 33vw;
+            width: 15vw;
             max-width: 66vw;
             border-radius: 33px;
             box-shadow: 0px 6px 6px 6px rgba(239, 229, 231, 0.66);
@@ -44,16 +67,100 @@
         }
     }
     nav {
-        width: 0px;
+        width: 66vw;
+        margin-top: 33px;
         .nav-inner {
-            padding: 15px 33px;
+            display: grid;
+            grid-template-areas:
+                "pages pages"
+                "contact socials";
+            row-gap: 66px;
+            padding: 33px 33px 15px 33px;
+            background: var(--color-light);
             border-radius: 33px;
             box-shadow: 0px 6px 6px 6px rgba(239, 229, 231, 0.66);
         }
-        ul {
-            padding: 0px;
-            li {
-                list-style: none;
+        #pages {
+            grid-area: pages;
+            p {
+                margin-bottom: 15px;
+            }
+            ul {
+                display: flex;
+                flex-flow: row nowrap;
+                gap: 15px;
+                width: fit-content;
+                padding: 0px;
+                margin: 0px;
+                li {
+                    list-style: none;
+                    > a {
+                        color: var(--color-dark);
+                        font-size: 1.5rem;
+                        text-decoration: none;
+                        &:visited {
+                            color: unset;
+                        }
+                    }
+                }
+            }
+        }
+        #contact {
+            grid-area: contact;
+            font-family: 'PP-Editorial-New-Ultrabold', sans-serif;
+            text-transform: uppercase;
+            font-size: 3rem;
+            color: var(--color-dark);
+            a {
+                display: inline-flex;
+                flex-flow: column nowrap;
+                color: var(--color-primary);
+                text-decoration: none;
+                span {
+                    margin-top: -15px;
+                    display: block;
+                    font-size: 1.5rem;
+                }
+            }
+        }
+        #socials {
+            grid-area: socials;
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: flex-end;
+            gap: 33px;
+            ul {
+                display: flex;
+                flex-flow: row nowrap;
+                gap: 15px;
+                width: fit-content;
+                padding: 0px;
+                margin: 0px;
+                li {
+                    list-style: none;
+                    > a {
+                        color: var(--color-dark);
+                        font-size: 1.5rem;
+                        text-decoration: none;
+                        span {
+                            position: absolute;
+                            width: 1px;
+                            height: 1px;
+                            padding: 0;
+                            margin: -1px;
+                            overflow: hidden;
+                            clip: rect(0, 0, 0, 0);
+                            white-space: nowrap;
+                            border: 0;
+                        }
+                        svg {
+                            width: 66px;
+                        }
+                        &:visited {
+                            color: unset;
+                        }
+                    }
+                }
             }
         }
     }
