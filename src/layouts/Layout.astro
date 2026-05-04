@@ -56,3 +56,31 @@ import Header from '../components/ui/header.astro';
 	}
 
 </style>
+
+<script>
+	import gsap from 'gsap';
+	import Flip from 'gsap/Flip';
+	import Swup from 'swup';
+	import SwupJsPlugin from '@swup/js-plugin';
+
+	gsap.registerPlugin(Flip);
+
+	const anims = [
+		{
+			from: '(.*)',
+			to: '/insights/:slug',
+			out: async () => {
+				await console.log('anim out');
+			},
+			in: async () => {
+				await console.log('anim in');
+			}
+		}
+	]
+
+	const swup = new Swup({
+		plugins: [new SwupJsPlugin({
+			animations: anims
+		})]
+	});
+</script>

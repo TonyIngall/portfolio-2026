@@ -4,6 +4,7 @@ import swup from '@swup/astro';
 
 export default defineConfig({
   integrations: [swup({
-    theme: false
+    theme: false,
+    globalInstance: true,
   })]
 });
