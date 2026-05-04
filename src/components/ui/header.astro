@@ -164,6 +164,55 @@ import Icon from "./Icon.astro"
             }
         }
     }
+    
+    @media screen and (max-width: 768px) {
+        header {
+            > div {
+                width: 33vw;
+            }
+        }
+        nav {
+            width: calc(100vw - 30px);
+            margin-top: 15px;
+            .nav-inner {
+                grid-template-rows: 1fr auto auto;
+                grid-template-areas:
+                    "pages"
+                    "contact"
+                    "socials";
+                row-gap: 15px;
+                height: calc(100vh - 135px);
+                padding: 33px 15px;
+            }
+            #pages {
+                height: 100%;
+                p {
+                    display: none;
+                }
+                ul {
+                    flex-flow: column nowrap;
+                    gap: 15px;
+                }
+            }
+            #contact {
+                font-size: 2.5rem;
+                a > span {
+                    margin-top: -10px;
+                    font-size: 1.25rem;
+                }
+            }
+            #socials {
+                align-items: flex-end;
+                flex-flow: column nowrap;
+                p {
+                    display: none;
+                }
+                ul {
+                    gap: 15px;
+                }
+            }
+        }
+    }
 </style>
 <script>
     import { gsap } from 'gsap';
