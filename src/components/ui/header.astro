@@ -245,6 +245,8 @@ import Icon from "./Icon.astro"
         tl: gsap.core.Timeline | null = null;
 
     const init = () => {
+        if(!pill || !menuIcon || !nav) return;
+        if(tl) tl.kill();
         const innerHeight = navInner ? navInner.scrollHeight : 0;
         tl = gsap.timeline({ paused: true });
         const lines = gsap.utils.toArray('#menu-icon line') as SVGRectElement[];
@@ -281,6 +283,13 @@ import Icon from "./Icon.astro"
         }, 0.33)
     }
     init();
+
+    window.addEventListener('resize', () => {
+        init();
+        if (!menuOpen) return;
+        const innerHeight = navInner ? navInner.scrollHeight : 0;
+        tl?.set(nav, { height: `${innerHeight}px` });
+    });
 
     const toggleMenu = () => {
         if (!tl) return;
