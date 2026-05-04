@@ -257,45 +257,72 @@ import Icon from "./Icon.astro"
     const nav = document.querySelector('nav');
     const navInner = document.querySelector('nav .nav-inner');
     let menuOpen: boolean = false,
-        tl: gsap.core.Timeline | null = null;
+        menuTl: gsap.core.Timeline | null = null,
+        iconTl: gsap.core.Timeline | null = null,
+        mm = gsap.matchMedia();
 
     const init = () => {
         if(!pill || !menuIcon || !nav) return;
-        if(tl) tl.kill();
+        if(menuTl) menuTl.kill();
+        if(iconTl) iconTl.kill();
         const innerHeight = navInner ? navInner.scrollHeight : 0;
-        tl = gsap.timeline({ paused: true });
         const lines = gsap.utils.toArray('#menu-icon line') as SVGRectElement[];
 
-        // Pill Expansion
-        tl.to(pill, {
-            duration: 0.66,
-            ease: 'power1.inOut',
-            easeReverse: 'back.inOut(0.66)',
-            width: '100vw',
-        }, 0)
-
         // Icon Transformation
-        tl.to(lines, {
+        iconTl = gsap.timeline({ paused: true });
+        iconTl.to(lines, {
             duration: 0.66,
             ease: 'power4.out',
             rotate: -66,
             y: (i) => i === 0 ? 7 : i === 1 ? 0 : -7,
             transformOrigin: 'center',
         }, 0)
-        tl.to([lines[1], lines[2]], {
+        iconTl.to([lines[1], lines[2]], {
             duration: 0.66,
             ease: 'power4.out',
             opacity: 0,
         }, 0)
 
-        // Nav Reveal
-        tl.set(nav, { width: '100vw' }, 0.33)
-        tl.to(nav, {
-            duration: 0.66,
-            ease: 'power4.out',
-            height: `${innerHeight}px`,
-            pointerEvents: 'all',
-        }, 0.33)
+        mm.add('(min-width: 769px)', () => {
+            menuTl = gsap.timeline({ paused: true });
+            // Pill Expansion
+            menuTl.to(pill, {
+                duration: 0.66,
+                ease: 'power1.inOut',
+                easeReverse: 'back.inOut(0.66)',
+                width: '100vw',
+            }, 0)
+
+            // Nav Reveal
+            menuTl.set(nav, { width: '100vw' }, 0.33)
+            menuTl.to(nav, {
+                duration: 0.66,
+                ease: 'power4.out',
+                height: `${innerHeight}px`,
+                pointerEvents: 'all',
+            }, 0.33)
+        })
+
+        mm.add('(max-width: 768px)', () => {
+            menuTl = gsap.timeline({ paused: true });
+            // Pill Expansion
+            menuTl.to(pill, {
+                duration: 0.66,
+                ease: 'power1.inOut',
+                easeReverse: 'back.inOut(0.66)',
+                width: '100vw',
+            }, 0)
+
+            // Nav Reveal
+            menuTl.set(nav, { width: '100vw' }, 0.5)
+            menuTl.to(nav, {
+                duration: 0.66,
+                ease: 'power4.out',
+                easeReverse: 'power4.in',
+                height: `${innerHeight}px`,
+                pointerEvents: 'all',
+            }, 0.5)
+        })
     }
     init();
 
@@ -303,12 +330,13 @@ import Icon from "./Icon.astro"
         init();
         if (!menuOpen) return;
         const innerHeight = navInner ? navInner.scrollHeight : 0;
-        tl?.set(nav, { height: `${innerHeight}px` });
+        menuTl?.set(nav, { height: `${innerHeight}px` });
     });
 
     const toggleMenu = () => {
-        if (!tl) return;
-        menuOpen ? tl.reverse() : tl.play();
+        if (!menuTl || !iconTl) return;
+        menuOpen ? menuTl.reverse() : menuTl.play();
+        menuOpen ? iconTl.reverse() : iconTl.play();
         menuOpen = !menuOpen;
     }
 
