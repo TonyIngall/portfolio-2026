@@ -78,6 +78,16 @@ import Header from '../components/ui/header.astro';
 			in: async () => {
 				await animateIn();
 			}
+		},
+		{
+			from: '(.*)',
+			to: '(.*)',
+			out: async () => {
+				await gsap.to('#swup', { opacity: 0, duration: 0.33 });
+			},
+			in: async () => {
+				await gsap.fromTo('#swup', { opacity: 0 }, { opacity: 1, duration: 0.33 });
+			}
 		}
 	]
 
