@@ -15,7 +15,9 @@ import Header from '../components/ui/header.astro';
 	</head>
 	<body>
 		<Header />
-		<slot />
+		<main id="swup">
+			<slot />
+		</main>
 	</body>
 </html>
 
@@ -62,25 +64,31 @@ import Header from '../components/ui/header.astro';
 	import Flip from 'gsap/Flip';
 	import Swup from 'swup';
 	import SwupJsPlugin from '@swup/js-plugin';
-
-	gsap.registerPlugin(Flip);
+	import SwupHeadPlugin from '@swup/head-plugin';
+	import SwupScriptsPlugin from '@swup/scripts-plugin';
+	import { animateIn } from '../animations/insight-single';
 
 	const anims = [
 		{
 			from: '(.*)',
 			to: '/insights/:slug',
 			out: async () => {
-				await console.log('anim out');
+				await gsap.to('#swup', { opacity: 0, duration: 0.33 });
 			},
 			in: async () => {
-				await console.log('anim in');
+				await animateIn();
 			}
 		}
 	]
 
 	const swup = new Swup({
-		plugins: [new SwupJsPlugin({
-			animations: anims
-		})]
+		containers: ['#swup'],
+		plugins: [
+			new SwupJsPlugin({
+				animations: anims,
+			}),
+			new SwupHeadPlugin(),
+			new SwupScriptsPlugin()
+		]
 	});
 </script>
