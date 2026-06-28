@@ -1,12 +1,14 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import List from '../components/insights/list.astro';
+import Bio from '../components/about/bio.astro';
 ---
 
 <Layout title="Insights" description="Thoughts and insights on Motion, Accessibility, and Web Development.">
     <main id="insights">
         <h1>Insights</h1>
         <List />
+        <Bio />
     </main>
 </Layout>
 
@@ -15,7 +17,6 @@ import List from '../components/insights/list.astro';
         display: grid;
         grid-template-columns: repeat(7, 1fr);
         gap: 15px;
-        padding: 50px 33px;
         h1 {
             grid-column: 2 / span 5;
             font-size: 11.5vw;
@@ -26,6 +27,25 @@ import List from '../components/insights/list.astro';
         }
         ul {
             grid-column: 2 / span 5;
+        }
+        #bio {
+            grid-column: 1 / span 7;
+            padding: 100px 0px;
+            box-shadow: inset 0px 33px 66px 0px var(--color-light),
+                inset 0px -33px 66px 0px var(--color-light);
+            background-image: 
+                linear-gradient(to right, #312b3614 1px, transparent 1px),
+                linear-gradient(to bottom, #312b3614 1px, transparent 1px);
+            background-size: 33px 33px;
+            background-position: center;
+            .description {
+                h2 {
+                    font-family: 'PP-Editorial-New-Ultrabold';
+                    font-size: max(2.5rem, 3vw);
+                    text-transform: uppercase;
+                    color: var(--color-dark);
+                }
+            }
         }
     }
     @media screen and (max-width: 1024px) {
@@ -39,6 +59,14 @@ import List from '../components/insights/list.astro';
             ul {
                 grid-column: 1 / span 5;
             }
+            #bio {
+                grid-column: 1 / span 5;
+                .description {
+                    h2 {
+                        font-size: max(2rem, 5vw);
+                    }
+                }
+            }
         }
     }
     @media screen and (max-width: 768px) {
@@ -51,6 +79,14 @@ import List from '../components/insights/list.astro';
             }
             ul {
                 grid-column: 1 / span 1;
+            }
+            #bio {
+                grid-column: 1 / span 1;
+                .description {
+                    h2 {
+                        font-size: max(2.5rem, 5vw);
+                    }
+                }
             }
         }
     }
