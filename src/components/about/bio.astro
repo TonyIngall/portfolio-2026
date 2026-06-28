@@ -1,0 +1,66 @@
+---
+import RichText from '../content/RichText.astro';
+
+const api = import.meta.env.PUBLIC_STRAPI_URL
+const response = await fetch(api + 'about?populate[blocks][populate]=*').then((response) => response.json());
+const about = response.data;
+const aboutContent = about.blocks;
+---
+<div id="bio">
+    {aboutContent.map((block: any) => {
+        switch (block.__component) {
+            case 'shared.rich-text':
+                return <RichText content={block.body} class="description" />;
+            case 'shared.media':
+                return <img class="profile" src={block.file.formats.medium.url} alt={block.file.alternativeText} />;
+            default:
+                return null;
+        }
+    })}
+</div>
+<style>
+    #bio {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 33px;
+        .description {
+            order: 2;
+            grid-column: span 2;
+        }
+        .profile {
+            order: 1;
+            grid-column: 2 / span 2;
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+        }
+    }
+    @media screen and (max-width: 1024px) {
+        #bio {
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            .description {
+                order: 2;
+                grid-column: span 3;
+            }
+            .profile {
+                order: 1;
+                grid-column: 1 / span 2;
+            }
+        }
+    }
+    @media screen and (max-width: 768px) {
+        #bio {
+            grid-template-columns: repeat(1, 1fr);
+            gap: 15px;
+            .description {
+                order: 2;
+                grid-column: span 1;
+            }
+            .profile {
+                order: 1;
+                grid-column: 1 / span 1;
+            }
+        }
+    }
+</style>
