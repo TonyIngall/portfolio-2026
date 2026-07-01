@@ -69,3 +69,7 @@ export interface StrapiCollectionResponse<T> {
 }
 
 export type ArticlesResponse = StrapiCollectionResponse<Article>;
+
+export type CategoriesResponse = StrapiCollectionResponse<Category>;
+
+export type SeriesResponse = StrapiCollectionResponse<Series>;
