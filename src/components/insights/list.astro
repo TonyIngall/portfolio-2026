@@ -1,5 +1,6 @@
 ---
 import type { Article, ArticlesResponse, Category } from '../../types/articles';
+const { hasTitle = true, hasCategories = true, hasSeries = true, hasDate = false } = Astro.props;
 
 const api = import.meta.env.PUBLIC_STRAPI_URL
 const response = await fetch(api + 'articles?sort[0]=publishedAt:desc&populate[categories][populate][0]=colour&populate[series][populate][0]=colour').then((response) => response.json()) as ArticlesResponse;
@@ -10,13 +11,16 @@ const articles = response.data;
     {articles.map((article: Article) => (
         <li>
             <a href={'/insights/' + article.slug}>
-                <span class="title">{article.title}</span>
-                <div class="categories">
-                    {article.categories && article.categories.map((category: Category) => (
-                        <span class="category" style={`--cat-color: ${category.colour.hex}`}>{category.name}</span>
-                    ))}
-                </div>
-                {article.series && <span class="series" style={`--series-color: ${article.series.colour.hex}`}>{article.series?.title}</span>}
+                {hasTitle && <span class="title">{article.title}</span>}
+                {hasDate && <span class="date">{new Date(article.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>}
+                {hasCategories && (
+                    <div class="categories">
+                        {article.categories && article.categories.map((category: Category) => (
+                            <span class="category" style={`--cat-color: ${category.colour.hex}`}>{category.name}</span>
+                        ))}
+                    </div>
+                )}
+                {hasSeries && article.series && <span class="series" style={`--series-color: ${article.series.colour.hex}`}>{article.series?.title}</span>}
             </a>
         </li>
     ))}
