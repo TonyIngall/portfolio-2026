@@ -76,7 +76,7 @@ const animateIn = () => {
             ease: 'power3.out',
             absoluteOnLeave: true,
             onComplete: () => {
-                gsap.to(['.content', '#meta', '#end'], { opacity: 1, duration: 0.33 });
+                gsap.to(['.content', '.meta', '#date',  '#end'], { opacity: 1, duration: 0.33 });
                 loaderTitle.style.display = 'none';
             }
         });
