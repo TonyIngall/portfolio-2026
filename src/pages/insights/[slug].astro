@@ -2,6 +2,9 @@
 import Layout from '../../layouts/Layout.astro';
 import RichText from '../../components/content/RichText.astro';
 import CopyLink from '../../components/insights/copy-link.astro';
+import NextInsight from '../../components/insights/next-insight.astro';
+import RelatedInsights from '../../components/insights/related-insights.astro';
+import Icon from '../../components/ui/Icon.astro';
 import type { Article, ArticlesResponse, Category } from '../../types/articles';
 
 import { gsap } from 'gsap';
@@ -37,9 +40,9 @@ const url = `${site_url}/insights/${slug}`;
         <section id="top">
             <div id="title">
             </div>
-            <div id="meta">
+            <div class="meta">
                 <div id="series">
-                    Series:
+                    <p>Series:</p>
                     {article.series && (
                         <span class="series" style={`--series-color: ${article.series.colour.hex};`}>{article.series.title}</span>
                     )}
@@ -47,7 +50,7 @@ const url = `${site_url}/insights/${slug}`;
                 <div id="categories">
                     {article.categories && article.categories.length > 0 && (
                         <>
-                            <p style={{ marginRight: '10px' }}>Topics Covered:</p>
+                            <p>Topics Covered:</p>
                             <div class="categories">
                                 {article.categories.map((category: Category) => (
                                     <span class="category" style={`--cat-color: ${category.colour.hex};`}>{category.name}</span>
@@ -56,14 +59,13 @@ const url = `${site_url}/insights/${slug}`;
                         </>
                     )}
                 </div>
-                <div id="date">
-                    Published on
-                    {new Date(article.publishedAt).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                    })}
-                </div>
+            </div>
+            <div id="date">
+                {new Date(article.publishedAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                })}
             </div>
         </section>
         <div class="content">
@@ -82,22 +84,30 @@ const url = `${site_url}/insights/${slug}`;
                 <p>It always helps to share valuable content. If you found this to be helpful, interesting or anything in-between - then please share this insight page with the helpful buttons below.</p>
             </div>
             <div class="links">
-                <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${url}`} target="_blank" rel="noopener noreferrer">Share on LinkedIn</a>
-                <a href={`https://twitter.com/intent/tweet?url=${url}&text=${article.title}`} target="_blank" rel="noopener noreferrer">Share on Twitter</a>
-                <a href={`https://www.facebook.com/sharer/sharer.php?u=${url}`} target="_blank" rel="noopener noreferrer">Share on Facebook</a>
-                <a href={`https://www.reddit.com/submit?url=${url}&title=${article.title}`} target="_blank" rel="noopener noreferrer">Share on Reddit</a>
+                <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${url}`} target="_blank" rel="noopener noreferrer">
+                    <Icon name="linkedin" size="md" class="inline-block" />
+                    <span>Share on LinkedIn</span>
+                </a>
+                <a href={`https://twitter.com/intent/tweet?url=${url}&text=${article.title}`} target="_blank" rel="noopener noreferrer">
+                    <Icon name="x" size="md" class="inline-block" />
+                    <span>Share on X</span>
+                </a>
+                <a href={`https://www.facebook.com/sharer/sharer.php?u=${url}`} target="_blank" rel="noopener noreferrer">
+                    <Icon name="facebook" size="md" class="inline-block" />
+                    <span>Share on Facebook</span>
+                </a>
+                <a href={`https://www.reddit.com/submit?url=${url}&title=${article.title}`} target="_blank" rel="noopener noreferrer">
+                    <Icon name="reddit" size="md" class="inline-block" />
+                    <span>Share on Reddit</span>
+                </a>
             </div>
             <div class="bottom">
                 <p>Or just copy a link!</p>
                 <CopyLink link={url} />
             </div>
         </section>
-        <section id="next">
-            <h2>Next insight</h2>
-        </section>
-        <section id="previous">
-            <h2>Previous insight</h2>
-        </section>
+        <NextInsight slug={slug} />
+        <RelatedInsights slug={slug} />
     </div>
 </Layout>
 
@@ -153,9 +163,11 @@ const url = `${site_url}/insights/${slug}`;
             grid-template-columns: 1fr 20%;
             margin-bottom: 50px;
             #title {
+                order: 1;
                 display: flex;
                 align-items: center;
                 justify-content: flex-start;
+                grid-column: 1 / span 2;
                 h1 {
                     text-wrap: balance;
                     font-size: 4.5rem;
@@ -163,16 +175,42 @@ const url = `${site_url}/insights/${slug}`;
                     line-height: 1.15;
                 }
             }
-            #meta {
+            .meta {
+                order: 3;
+                opacity: 0;
+                display: flex;
+                flex-flow: column nowrap;
+                gap: 15px;
+                color: var(--color-dark);
+                font-size: 18px;
+                #series, #categories {
+                    p {
+                        margin-bottom: 5px;
+                    }
+                }
+                #series .series {
+                    display: inline-block;
+                    padding: 0.33rem 1.12rem;
+                    border-radius: 33px;
+                    border: 1px solid var(--series-color);
+                }
+                #categories .categories {
+                    display: flex;
+                    flex-flow: row wrap;
+                    gap: 10px;
+                    .category {
+                        display: inline-block;
+                        border: 1px solid var(--cat-color);
+                        padding: 0.33rem 1.12rem;
+                        border-radius: 33px;
+                    }
+                }
+            }
+            #date {
+                order: 2;
                 opacity: 0;
                 color: var(--color-dark);
                 font-size: 18px;
-                #categories {
-                }
-                #series {
-                }
-                #date {
-                }
             }
         }
         .content {
@@ -191,10 +229,16 @@ const url = `${site_url}/insights/${slug}`;
     #end {
         opacity: 0;
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(7, 1fr);
         column-gap: 66px;
         row-gap: 33px;
         padding: 100px 33px;
+        box-shadow: inset 0px 33px 66px 0px var(--color-light);
+        background-image: 
+            linear-gradient(to right, #312b3614 1px, transparent 1px),
+            linear-gradient(to bottom, #312b3614 1px, transparent 1px);
+        background-size: 33px 33px;
+        background-position: center;
         h2 {
             font-family: 'PP-Editorial-New-Ultrabold';
             font-size: 2.5rem;
@@ -207,6 +251,7 @@ const url = `${site_url}/insights/${slug}`;
         section {
             position: relative;
             border: 1px solid var(--color-dark);
+            background-color: var(--color-light);
             padding: 50px 33px 30px 33px;
             border-radius: 33px;
             &#share {
@@ -214,7 +259,8 @@ const url = `${site_url}/insights/${slug}`;
                 justify-content: space-between;
                 flex-flow: column nowrap;
                 gap: 15px;
-                grid-row: span 2;
+                grid-column: 2 / span 3;
+                grid-row: 1 / span 2;
                 .top {
                     display: flex;
                     flex-flow: column nowrap;
@@ -223,7 +269,27 @@ const url = `${site_url}/insights/${slug}`;
                 .links {
                     display: grid;
                     grid-template-columns: repeat(4, 1fr);
-                    gap: 15px;
+                    gap: 33px;
+                    width: fit-content;
+                    a {
+                        color: var(--color-dark);
+                        width: 66px;
+                        transition: transform 0.3s ease;
+                        &:hover {
+                            transform: rotate(-5deg) scale(1.1);
+                        }
+                        span {
+                            position: absolute;
+                            width: 1px;
+                            height: 1px;
+                            padding: 0;
+                            margin: -1px;
+                            overflow: hidden;
+                            clip-path: inset(50%);
+                            white-space: nowrap;
+                            border-width: 0;
+                        }
+                    }
                 }
                 .bottom {
                     margin-top: 50px;
@@ -237,8 +303,9 @@ const url = `${site_url}/insights/${slug}`;
                     }
                 }
             }
-            &#next, &#previous {
-
+            &#next, &#previous, &#related {
+                grid-row: span 1;
+                grid-column: 5 / span 3;
             }
         }
     }
@@ -254,8 +321,30 @@ const url = `${site_url}/insights/${slug}`;
             #top {
                 grid-template-columns: 1fr;
                 row-gap: 33px;
-                #title h1 {
-                    font-size: 4rem;
+                #title {
+                    grid-column: 1 / span 1;
+                    h1 {
+                        font-size: 4rem;
+                    }
+                }
+            }
+        }
+        #end {
+            grid-template-columns: 1fr;
+            row-gap: 33px;
+            padding: 50px 15px;
+            section {
+                &#share {
+                    grid-column: 1 / span 1;
+                    grid-row: 1 / span 1;
+                    margin-bottom: 20px;
+                    .bottom {
+                        margin-bottom: 20px;
+                    }
+                }
+                &#next, &#previous, &#related {
+                    grid-column: 1 / span 1;
+                    grid-row: span 1;
                 }
             }
         }

@@ -1,0 +1,108 @@
+---
+import type { Article, ArticlesResponse, Category } from '../../types/articles';
+const { slug } = Astro.props;
+
+const api = import.meta.env.PUBLIC_STRAPI_URL;
+
+const curResponse = await fetch(api + `articles?filters[slug][$eq]=${slug}&populate[categories][populate][0]=colour&populate[series][populate][0]=colour`).then((response) => response.json()) as ArticlesResponse;
+const curArticle = curResponse.data[0] as Article;
+
+const a = [];
+
+// 1. Get by series
+const seriesResponse = await fetch(api + `articles?filters[series][id][$eq]=${curArticle.series?.id}&filters[slug][$ne]=${slug}&sort=publishedAt:desc&pagination[limit]=3&populate[categories][populate][0]=colour&populate[series][populate][0]=colour`).then((response) => response.json()) as ArticlesResponse;
+const seriesArticles = seriesResponse.data as Article[];
+a.push(...seriesArticles);
+
+// 2. Get by categories
+if(a.length < 3 && curArticle.categories && curArticle.categories.length > 0) {
+    const categoryIds = curArticle.categories.map((category: Category) => category.id);
+    categoryIds.forEach(async (categoryId: number) => {
+        const categoryResponse = await fetch(api + `articles?filters[categories][id][$eq]=${categoryId}&filters[slug][$ne]=${slug}&sort=publishedAt:desc&pagination[limit]=${3 - a.length}&populate[categories][populate][0]=colour&populate[series][populate][0]=colour`).then((response) => response.json()) as ArticlesResponse;
+        const categoryArticles = categoryResponse.data as Article[];
+        a.push(...categoryArticles);
+    });
+}
+
+// 3. Remove duplicates
+const articles = a.filter((article, index, self) =>
+    index === self.findIndex((a) => a.id === article.id)
+);
+
+---
+<section id="related">
+    <h2>Related insights</h2>
+    {articles.length > 0 && (
+        <ul>
+            {articles.map((article: Article) => (
+                <li>
+                    <a href={`/insights/${article.slug}`}>
+                        <span class="title">{article.title}</span>
+                        <div class="categories">
+                            {article.categories && article.categories.map((category: Category) => (
+                                <span class="category" style={`--cat-color: ${category.colour.hex}`}>{category.name}</span>
+                            ))}
+                        </div>
+                        {article.series && <span class="series" style={`--series-color: ${article.series.colour.hex}`}>{article.series?.title}</span>}
+                    </a>
+                </li>
+            ))}
+        </ul>
+    )}
+</section>
+
+<style>
+    #related {
+        h2 {
+            margin-bottom: 0.5rem;
+        }
+        ul {
+            padding-left: 0px;
+            li {
+                list-style: none;
+                a {
+                    width: 100%;
+                    display: grid;
+                    grid-template-columns: auto auto;
+                    grid-template-rows: auto auto;
+                    align-items: center;
+                    gap: 6px 15px;
+                    text-decoration: none;
+                    color: var(--color-dark);
+                    .categories {
+                        display: flex;
+                        flex-flow: row nowrap;
+                        gap: 10px;
+                        .category {
+                            border: 1px solid var(--cat-color);
+                            padding: 0.33rem 1.12rem;
+                            border-radius: 33px;
+                        }
+                    }
+                    .series {
+                        grid-column: 1 / span 2;
+                        width: fit-content;
+                        border: 1px solid var(--series-color);
+                        padding: 0.33rem 1.12rem;
+                        border-radius: 33px;
+                    }
+                }
+            }
+        }
+    }
+    @media (max-width: 768px) {
+        #next {
+            a {
+                grid-template-columns: 1fr;
+                align-items: flex-start;
+                gap: 9px;
+                .categories {
+                    flex-flow: row wrap;
+                }
+                .series {
+                    grid-column: 1 / span 1;
+                }
+            }
+        }
+    }
+</style>
