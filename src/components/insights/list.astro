@@ -11,7 +11,7 @@ const articles = response.data;
         <li>
             <a href={'/insights/' + article.slug}>
                 <span class="title">{article.title}</span>
-                <div class="category">
+                <div class="categories">
                     {article.categories && article.categories.map((category: Category) => (
                         <span class="category" style={`--cat-color: ${category.colour.hex}`}>{category.name}</span>
                     ))}
