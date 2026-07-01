@@ -251,6 +251,15 @@ import Icon from "./Icon.astro"
     }
 </style>
 <script>
+    const setHeaderHeight = () => {
+        const pill = document.querySelector('header > div');
+        const headerHeight = pill ? pill.scrollHeight : 0;
+        document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
+    }
+    window.addEventListener('load', setHeaderHeight);
+    window.addEventListener('resize', setHeaderHeight);
+</script>
+<script>
     import { gsap } from 'gsap';
     const pill = document.querySelector('header > div');
     const menuIcon = document.getElementById('menu-icon');
