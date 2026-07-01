@@ -16,10 +16,12 @@ a.push(...seriesArticles);
 
 // 2. Get by categories
 if(a.length < 3 && curArticle.categories && curArticle.categories.length > 0) {
-    const categoryIds = curArticle.categories.map((category: Category) => category.id).join(',');
-    const categoryResponse = await fetch(api + `articles?filters[categories][id][$in]=${categoryIds}&filters[slug][$ne]=${slug}&sort=publishedAt:desc&pagination[limit]=${3 - a.length}&populate[categories][populate][0]=colour&populate[series][populate][0]=colour`).then((response) => response.json()) as ArticlesResponse;
-    const categoryArticles = categoryResponse.data as Article[];
-    a.push(...categoryArticles);
+    const categoryIds = curArticle.categories.map((category: Category) => category.id);
+    categoryIds.forEach(async (categoryId: number) => {
+        const categoryResponse = await fetch(api + `articles?filters[categories][id][$eq]=${categoryId}&filters[slug][$ne]=${slug}&sort=publishedAt:desc&pagination[limit]=${3 - a.length}&populate[categories][populate][0]=colour&populate[series][populate][0]=colour`).then((response) => response.json()) as ArticlesResponse;
+        const categoryArticles = categoryResponse.data as Article[];
+        a.push(...categoryArticles);
+    });
 }
 
 // 3. Remove duplicates
