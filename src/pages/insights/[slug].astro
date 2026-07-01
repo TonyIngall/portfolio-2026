@@ -4,6 +4,7 @@ import RichText from '../../components/content/RichText.astro';
 import CopyLink from '../../components/insights/copy-link.astro';
 import NextInsight from '../../components/insights/next-insight.astro';
 import RelatedInsights from '../../components/insights/related-insights.astro';
+import Icon from '../../components/ui/Icon.astro';
 import type { Article, ArticlesResponse, Category } from '../../types/articles';
 
 import { gsap } from 'gsap';
@@ -83,10 +84,22 @@ const url = `${site_url}/insights/${slug}`;
                 <p>It always helps to share valuable content. If you found this to be helpful, interesting or anything in-between - then please share this insight page with the helpful buttons below.</p>
             </div>
             <div class="links">
-                <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${url}`} target="_blank" rel="noopener noreferrer">Share on LinkedIn</a>
-                <a href={`https://twitter.com/intent/tweet?url=${url}&text=${article.title}`} target="_blank" rel="noopener noreferrer">Share on Twitter</a>
-                <a href={`https://www.facebook.com/sharer/sharer.php?u=${url}`} target="_blank" rel="noopener noreferrer">Share on Facebook</a>
-                <a href={`https://www.reddit.com/submit?url=${url}&title=${article.title}`} target="_blank" rel="noopener noreferrer">Share on Reddit</a>
+                <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${url}`} target="_blank" rel="noopener noreferrer">
+                    <Icon name="linkedin" size="md" class="inline-block" />
+                    <span>Share on LinkedIn</span>
+                </a>
+                <a href={`https://twitter.com/intent/tweet?url=${url}&text=${article.title}`} target="_blank" rel="noopener noreferrer">
+                    <Icon name="x" size="md" class="inline-block" />
+                    <span>Share on X</span>
+                </a>
+                <a href={`https://www.facebook.com/sharer/sharer.php?u=${url}`} target="_blank" rel="noopener noreferrer">
+                    <Icon name="facebook" size="md" class="inline-block" />
+                    <span>Share on Facebook</span>
+                </a>
+                <a href={`https://www.reddit.com/submit?url=${url}&title=${article.title}`} target="_blank" rel="noopener noreferrer">
+                    <Icon name="reddit" size="md" class="inline-block" />
+                    <span>Share on Reddit</span>
+                </a>
             </div>
             <div class="bottom">
                 <p>Or just copy a link!</p>
@@ -256,7 +269,27 @@ const url = `${site_url}/insights/${slug}`;
                 .links {
                     display: grid;
                     grid-template-columns: repeat(4, 1fr);
-                    gap: 15px;
+                    gap: 33px;
+                    width: fit-content;
+                    a {
+                        color: var(--color-dark);
+                        width: 66px;
+                        transition: transform 0.3s ease;
+                        &:hover {
+                            transform: rotate(-5deg) scale(1.1);
+                        }
+                        span {
+                            position: absolute;
+                            width: 1px;
+                            height: 1px;
+                            padding: 0;
+                            margin: -1px;
+                            overflow: hidden;
+                            clip-path: inset(50%);
+                            white-space: nowrap;
+                            border-width: 0;
+                        }
+                    }
                 }
                 .bottom {
                     margin-top: 50px;
