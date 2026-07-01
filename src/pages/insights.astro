@@ -28,6 +28,20 @@ import Bio from '../components/about/bio.astro';
         }
         ul {
             grid-column: 2 / span 5;
+            li {
+                &:not(:last-child) {
+                    padding-bottom: 15px;
+                    border-bottom: 1px solid var(--color-accent);
+                    margin-bottom: 15px;
+                }
+                .title {
+                    flex-grow: 1;
+                }
+                .categories {
+                    display: flex;
+                    gap: 15px;
+                }
+            }
         }
         #bio {
             grid-column: 1 / span 7;
@@ -59,6 +73,10 @@ import Bio from '../components/about/bio.astro';
             }
             ul {
                 grid-column: 1 / span 5;
+                a {
+                    align-items: flex-start;
+                    flex-flow: column nowrap;
+                }
             }
             #bio {
                 grid-column: 1 / span 5;
