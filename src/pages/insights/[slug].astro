@@ -2,6 +2,8 @@
 import Layout from '../../layouts/Layout.astro';
 import RichText from '../../components/content/RichText.astro';
 import CopyLink from '../../components/insights/copy-link.astro';
+import NextInsight from '../../components/insights/next-insight.astro';
+import RelatedInsights from '../../components/insights/related-insights.astro';
 import type { Article, ArticlesResponse, Category } from '../../types/articles';
 
 import { gsap } from 'gsap';
@@ -92,12 +94,8 @@ const url = `${site_url}/insights/${slug}`;
                 <CopyLink link={url} />
             </div>
         </section>
-        <section id="next">
-            <h2>Next insight</h2>
-        </section>
-        <section id="previous">
-            <h2>Previous insights</h2>
-        </section>
+        <NextInsight slug={slug} />
+        <RelatedInsights slug={slug} />
     </div>
 </Layout>
 
@@ -245,7 +243,7 @@ const url = `${site_url}/insights/${slug}`;
                     }
                 }
             }
-            &#next, &#previous {
+            &#next, &#previous, &#related {
                 grid-row: span 1;
                 grid-column: 5 / span 3;
             }
@@ -277,7 +275,7 @@ const url = `${site_url}/insights/${slug}`;
                     grid-column: 1 / span 1;
                     grid-row: 1 / span 1;
                 }
-                &#next, &#previous {
+                &#next, &#previous, &#related {
                     grid-column: 1 / span 1;
                     grid-row: span 1;
                 }
