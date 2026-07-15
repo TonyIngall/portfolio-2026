@@ -9,6 +9,10 @@ const animateIn = () => {
     const title = document.querySelector('#title');
     const h1 = document.querySelector('#loader-title h1');
 
+    const body = document.querySelector('body');
+    body.style.overflow = 'hidden';
+    body.setAttribute('data-lenis-prevent', '');
+
     const BlockTitle = () => {
         if(!loaderTitle || !h1) return;
         const split = new SplitText(h1, {
@@ -78,6 +82,8 @@ const animateIn = () => {
             onComplete: () => {
                 gsap.to(['.content', '.meta', '#date',  '#end'], { opacity: 1, duration: 0.33 });
                 loaderTitle.style.display = 'none';
+                body.style.overflow = 'auto';
+                body.removeAttribute('data-lenis-prevent');
             }
         });
     }
