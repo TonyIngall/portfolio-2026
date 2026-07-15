@@ -124,15 +124,15 @@ const url = `${site_url}/insights/${slug}`;
             will-change: font-size, line-height, transform;
         }
         #loader-title {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: calc(100vw - 100px);
+            height: calc(100vh - 66px);
             padding: 50px 33px;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             h1 {
                 text-wrap: balance;
                 font-size: 11.5vw;
@@ -315,6 +315,9 @@ const url = `${site_url}/insights/${slug}`;
         #insight {
             padding: 50px 15px;
             #loader-title {
+                padding: 50px 15px;
+                width: calc(100vw - 30px);
+                height: calc(100vh - 100px);
                 h1 {
                     font-size: 5rem;
                 }
