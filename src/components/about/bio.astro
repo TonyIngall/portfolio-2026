@@ -12,7 +12,7 @@ const aboutContent = about.blocks;
             case 'shared.rich-text':
                 return <RichText content={block.body} class="description" />;
             case 'shared.media':
-                return <img class="profile" src={block.file.formats.medium.url} alt={block.file.alternativeText} />;
+                return <img class="profile" src={block.file.url} alt={block.file.alternativeText} />;
             default:
                 return null;
         }
