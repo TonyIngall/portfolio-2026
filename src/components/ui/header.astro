@@ -209,6 +209,7 @@ import Icon from "./Icon.astro"
                 max-width: calc(100vw - 30px);
             }
             nav {
+                max-height: calc(100vh - 30px - var(--header-height));
                 max-width: calc(100vw - 30px);
                 .nav-inner {
                     grid-template-rows: 1fr auto auto;
@@ -221,7 +222,7 @@ import Icon from "./Icon.astro"
                     padding: 33px 15px;
                 }
                 #pages {
-                    height: 100%;
+                    height: calc(100% - 30px);
                     p {
                         display: none;
                     }
