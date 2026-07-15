@@ -339,11 +339,63 @@ import Icon from "./Icon.astro"
         menuTl?.set(nav, { height: `${innerHeight}px` });
     });
 
+    const closeMenu = (immediate: boolean = false) => {
+        if (!menuTl || !iconTl) {
+            menuOpen = false;
+            return;
+        }
+
+        if (immediate) {
+            menuTl.pause(0);
+            iconTl.pause(0);
+            menuOpen = false;
+            return;
+        }
+
+        menuTl.reverse();
+        iconTl.reverse();
+        menuOpen = false;
+    };
+
+    document.addEventListener('astro:before-preparation', () => {
+        closeMenu(false);
+    });
+
+    document.addEventListener('astro:before-swap', () => {
+        closeMenu(false);
+    });
+
+    document.addEventListener('astro:page-load', () => {
+        closeMenu(false);
+    });
+
+    const isInternalPageLink = (link: HTMLAnchorElement) => {
+        const href = link.getAttribute('href');
+        if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) {
+            return false;
+        }
+
+        const url = new URL(href, window.location.href);
+        return url.origin === window.location.origin;
+    };
+
+    nav?.addEventListener('click', (event) => {
+        const target = event.target as HTMLElement | null;
+        const link = target?.closest('a') as HTMLAnchorElement | null;
+        if (!link || !isInternalPageLink(link)) return;
+        closeMenu(false);
+    });
+
     const toggleMenu = () => {
         if (!menuTl || !iconTl) return;
-        menuOpen ? menuTl.reverse() : menuTl.play();
-        menuOpen ? iconTl.reverse() : iconTl.play();
-        menuOpen = !menuOpen;
+        if (menuOpen) {
+            closeMenu();
+            return;
+        }
+
+        menuTl.play();
+        iconTl.play();
+        menuOpen = true;
     }
 
     menuIcon ? menuIcon.addEventListener('click', toggleMenu) : null;
