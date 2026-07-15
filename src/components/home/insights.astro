@@ -11,7 +11,7 @@ const articles = response.data;
         <li>
             <a href={'/insights/' + article.slug}>
                 <span class="title">{article.title}</span>
-                <div class="category">
+                <div class="categories">
                     {article.categories && article.categories.map((category: Category) => (
                         <span class="category" style={`--cat-color: ${category.colour.hex}`}>{category.name}</span>
                     ))}
@@ -36,10 +36,15 @@ const articles = response.data;
                 text-decoration: none;
                 font-size: 1.25rem;
                 color: var(--color-dark);
-                .category {
-                    padding: 0.33rem 1.12rem;
-                    border: 1px solid var(--cat-color);
-                    border-radius: 33px;
+                .categories {
+                    display: flex;
+                    flex-flow: row wrap;
+                    gap: 15px;    
+                    .category {
+                        padding: 0.33rem 1.12rem;
+                        border: 1px solid var(--cat-color);
+                        border-radius: 33px;
+                    }
                 }
                 .series {
                     padding: 0.33rem 1.12rem;
@@ -47,6 +52,12 @@ const articles = response.data;
                     border-radius: 33px;
                 }
             }
+        }
+    }
+    @media screen and (max-width: 1024px) {
+        li a {
+            align-items: flex-start;
+            flex-flow: column nowrap;
         }
     }
 </style>
