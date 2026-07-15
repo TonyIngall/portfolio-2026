@@ -204,7 +204,8 @@ import Icon from "./Icon.astro"
     @media screen and (max-width: 768px) {
         header {
             #pill {
-                width: 33vw;
+                min-width: 225px;
+                width: 45vw;
                 max-width: calc(100vw - 30px);
             }
             nav {
@@ -267,15 +268,25 @@ import Icon from "./Icon.astro"
     const navInner = document.querySelector('nav .nav-inner');
     let menuOpen: boolean = false,
         menuTl: gsap.core.Timeline | null = null,
-        iconTl: gsap.core.Timeline | null = null,
-        mm = gsap.matchMedia();
+        iconTl: gsap.core.Timeline | null = null;
 
     const init = () => {
         if(!pill || !menuIcon || !nav) return;
         if(menuTl) menuTl.kill();
         if(iconTl) iconTl.kill();
+
+        gsap.set(pill, { clearProps: 'width' });
+        gsap.set(nav, { clearProps: 'width,height,pointerEvents' });
+
         const innerHeight = navInner ? navInner.scrollHeight : 0;
-        const lines = gsap.utils.toArray('#menu-icon line') as SVGRectElement[];
+        const lines = gsap.utils.toArray('#menu-icon line') as SVGLineElement[];
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        const navOffset = isMobile ? 0.5 : 0.33;
+        const closedPillWidth = getComputedStyle(pill).width;
+        const closedNavWidth = getComputedStyle(nav).width;
+        const closedNavHeight = getComputedStyle(nav).height;
+
+        gsap.set(lines, { clearProps: 'transform,opacity' });
 
         // Icon Transformation
         iconTl = gsap.timeline({ paused: true });
@@ -292,46 +303,32 @@ import Icon from "./Icon.astro"
             opacity: 0,
         }, 0);
 
-        mm.add('(min-width: 769px)', () => {
-            menuTl = gsap.timeline({ paused: true });
-            // Pill Expansion
-            menuTl.to(pill, {
-                duration: 0.66,
-                ease: 'power1.inOut',
-                easeReverse: 'back.inOut(0.66)',
-                width: '100vw',
-            }, 0)
+        menuTl = gsap.timeline({ paused: true });
+        // Pill Expansion
+        menuTl.fromTo(pill, {
+            width: closedPillWidth,
+        }, {
+            duration: 0.66,
+            ease: 'power1.inOut',
+            width: '100vw',
+        }, 0);
 
-            // Nav Reveal
-            menuTl.set(nav, { width: '100vw' }, 0.33)
-            menuTl.to(nav, {
-                duration: 0.66,
-                ease: 'power4.out',
-                height: `${innerHeight}px`,
-                pointerEvents: 'all',
-            }, 0.33)
-        })
+        // Nav Reveal
+        menuTl.fromTo(nav, {
+            width: closedNavWidth,
+            height: closedNavHeight,
+            pointerEvents: 'none',
+        }, {
+            duration: 0.66,
+            ease: 'power4.out',
+            width: '100vw',
+            height: `${innerHeight}px`,
+            pointerEvents: 'all',
+        }, navOffset);
 
-        mm.add('(max-width: 768px)', () => {
-            menuTl = gsap.timeline({ paused: true });
-            // Pill Expansion
-            menuTl.to(pill, {
-                duration: 0.66,
-                ease: 'power1.inOut',
-                easeReverse: 'back.inOut(0.66)',
-                width: '100vw',
-            }, 0)
-
-            // Nav Reveal
-            menuTl.set(nav, { width: '100vw' }, 0.5)
-            menuTl.to(nav, {
-                duration: 0.66,
-                ease: 'power4.out',
-                easeReverse: 'power4.in',
-                height: `${innerHeight}px`,
-                pointerEvents: 'all',
-            }, 0.5)
-        })
+        // Keep visual state aligned with the logical menu state after every rebuild.
+        menuTl.progress(menuOpen ? 1 : 0);
+        iconTl.progress(menuOpen ? 1 : 0);
     }
     init();
 
