@@ -61,6 +61,7 @@ import Insights from '../components/home/insights.astro';
             grid-template-columns: repeat(5, 1fr);
             gap: 15px;
             p {
+                display: block;
                 font-size: 1.5rem;
                 &:nth-child(1) {
                     grid-column: 1 / span 2;
@@ -163,6 +164,24 @@ import Insights from '../components/home/insights.astro';
             }
             #info {
                 grid-column: 1 / span 1;
+                grid-template-columns: 1fr 1fr;
+                p {
+                    &:nth-child(1) {
+                        grid-column: 1 / span 1;
+                        grid-row: 1 / span 1;
+                        font-size: 1.15rem;
+                    }
+                    &:nth-child(2) {
+                        grid-column: 1 / span 2;
+                        grid-row: 3 / span 1;
+                    }
+                    &:nth-child(3) {
+                        grid-column: 2 / span 1;
+                        grid-row: 1 / span 1;
+                        text-align: right;
+                        font-size: 1.15rem;
+                    }
+                }
             }
             #insights {
                 grid-column: 1 / span 1;
