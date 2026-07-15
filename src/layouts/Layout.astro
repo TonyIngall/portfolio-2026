@@ -58,16 +58,36 @@ import Header from '../components/ui/header.astro';
 	}
 
 </style>
-
 <script>
+	import Lenis from 'lenis';
+	import 'lenis/dist/lenis.css';
 	import gsap from 'gsap';
-	import Flip from 'gsap/Flip';
+	import ScrollTrigger from 'gsap/ScrollTrigger';
 	import Swup from 'swup';
 	import SwupJsPlugin from '@swup/js-plugin';
 	import SwupHeadPlugin from '@swup/head-plugin';
 	import SwupScriptsPlugin from '@swup/scripts-plugin';
 	import { animateIn } from '../animations/insight-single';
 
+	// Lenis Init
+	const lenis = new Lenis({
+		smoothWheel: true,
+		syncTouch: true,
+		touchMultiplier: 1,
+		easing: (t) => Math.min(1, 1.001 - Math.pow(1 - t, 4)),
+	});
+
+	lenis.on('scroll', (e) => {
+		ScrollTrigger.update;
+	});
+
+	gsap.ticker.add((time) => {
+		lenis.raf(time * 1000);
+	});
+
+	gsap.ticker.lagSmoothing(0);
+	
+	// Swup Animations
 	const anims = [
 		{
 			from: '(.*)',
@@ -91,6 +111,7 @@ import Header from '../components/ui/header.astro';
 		}
 	]
 
+	// Swup Init
 	const swup = new Swup({
 		containers: ['#swup'],
 		plugins: [
