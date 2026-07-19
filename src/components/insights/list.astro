@@ -14,11 +14,14 @@ const articles = response.data;
 ---
 
 <ul>
-    {articles.map((article: Article) => (
-        <li>
+    {articles.map((article: Article) => {
+        const date = new Date(article.publishedAt);
+        const isNew = (new Date().getTime() - date.getTime()) < 1000 * 60 * 60 * 24 * 7; // 7 days
+        return (
+            <li>
             <a href={'/insights/' + article.slug}>
                 {hasTitle && <span class="title">{article.title}</span>}
-                {hasDate && <span class="date">{new Date(article.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>}
+                {hasDate && <span class="date">{date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>}
                 {hasCategories && (
                     <div class="categories">
                         {article.categories && article.categories.map((category: Category) => (
@@ -27,9 +30,11 @@ const articles = response.data;
                     </div>
                 )}
                 {hasSeries && article.series && <span class="series" style={`--series-color: ${article.series.colour.hex}`}>{article.series?.title}</span>}
+                {isNew && <div class="new"><span>New</span></div>}
             </a>
         </li>
-    ))}
+        )
+    })}
 </ul>
 
 <style>
@@ -38,6 +43,7 @@ const articles = response.data;
         li {
             list-style: none;
             a {
+                position: relative;
                 width: 100%;
                 display: flex;
                 flex-flow: row nowrap;
@@ -60,7 +66,70 @@ const articles = response.data;
                     padding: 0.33rem 1.12rem;
                     border-radius: 33px;
                 }
+                .new {
+                    position: absolute;
+                    top: -33px;
+                    left: -66px;
+                    width: 66px;
+                    height: 66px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: var(--color-primary);
+                    color: var(--color-light);
+                    border-radius: 33px;
+                    transform: rotate(-15deg) scale(0);
+                    overflow: hidden;
+                    span {
+                        display: inline-block;
+                        margin-top: 6px;
+                        font-family: 'PP-Editorial-New-Ultrabold';
+                        text-transform: uppercase;
+                        font-size: 1.25rem;
+                    }
+                }
+            }
+        }
+    }
+    @media (max-width: 768px) {
+        ul {
+            li {
+                a {
+                    flex-flow: column nowrap;
+                    align-items: flex-start;
+                    .categories {
+                        gap: 6px;
+                    }
+                    .new {
+                        top: -33px;
+                        left: unset;
+                        right: 0px;
+                    }
+                }
             }
         }
     }
 </style>
+<script>
+    import { gsap } from 'gsap';
+
+    const n = document.querySelectorAll('.new');
+    n.forEach((el) => {
+        const tl = gsap.timeline({ repeat: 0, yoyo: false });
+        const rotateTl = gsap.timeline({ repeat: -1, yoyo: false, repeatDelay: 0.66 });
+        tl.to(el, {
+            scale: 1,
+            rotate: -15,
+            duration: 0.33,
+            delay: 0.66,
+            ease: 'back.out(1.7)',
+        });
+        rotateTl.fromTo(el.querySelector('span'), {
+            xPercent: -115,
+        }, {
+            xPercent: 115,
+            duration: 1.23,
+            ease: 'linear',
+        });
+    });
+</script>
