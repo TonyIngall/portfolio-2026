@@ -96,6 +96,7 @@ import Header from '../components/ui/header.astro';
 				await gsap.to('#swup', { opacity: 0, duration: 0.33 });
 			},
 			in: async () => {
+				lenis.scrollTo(0, { immediate: true });
 				await animateIn();
 			}
 		},
@@ -106,6 +107,7 @@ import Header from '../components/ui/header.astro';
 				await gsap.to('#swup', { opacity: 0, duration: 0.33 });
 			},
 			in: async () => {
+				lenis.scrollTo(0, { immediate: true });
 				await gsap.fromTo('#swup', { opacity: 0 }, { opacity: 1, duration: 0.33 });
 			}
 		}
