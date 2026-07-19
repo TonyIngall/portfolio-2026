@@ -154,14 +154,6 @@ const { link } = Astro.props;
             button.removeEventListener('click', handleCopy);
         };
     };
-
-    const cleanups = Array.from(document.querySelectorAll<HTMLElement>('[data-copy-link]')).map(setupCopyLink);
-
-    window.addEventListener('beforeunload', () => {
-        cleanups.forEach((cleanup) => {
-            if (typeof cleanup === 'function') cleanup();
-        });
-    });
 </script>
 
 <style>
