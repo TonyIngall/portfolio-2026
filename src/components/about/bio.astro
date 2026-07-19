@@ -1,5 +1,6 @@
 ---
 import RichText from '../content/RichText.astro';
+import Icon from '../ui/Icon.astro';
 
 const api = import.meta.env.PUBLIC_STRAPI_URL
 const response = await fetch(api + 'about?populate[blocks][populate]=*').then((response) => response.json());
@@ -17,11 +18,22 @@ const aboutContent = about.blocks;
                 return null;
         }
     })}
+    <div class="socials">
+        <a href="https://github.com/tonyingall" target="_blank" rel="noopener noreferrer">
+            <Icon name="github" size="md" class="social-icon" />
+            <span class="sr-only">GitHub</span>
+        </a>
+        <a href="https://linkedin.com/in/anthonyingall" target="_blank" rel="noopener noreferrer">
+            <Icon name="linkedin" size="md" class="social-icon" />
+            <span class="sr-only">LinkedIn</span>
+        </a>
+    </div>
 </div>
 <style>
     #bio {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
+        align-items: center;
         gap: 33px;
         .description {
             order: 2;
@@ -30,9 +42,41 @@ const aboutContent = about.blocks;
         .profile {
             order: 1;
             grid-column: 2 / span 2;
+            grid-row: 1 / span 2;
             width: 100%;
             height: auto;
             border-radius: 15px;
+        }
+        .socials {
+            order: 3;
+            grid-column: 4 / span 2;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: flex-start;
+            svg {
+                color: var(--color-dark);
+                width: 66px;
+                height: 66px;
+            }
+            .sr-only {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                padding: 0;
+                margin: -1px;
+                overflow: hidden;
+                clip: rect(0, 0, 0, 0);
+                white-space: nowrap;
+                border-width: 0;
+            }
+            .social-icon {
+                cursor: pointer;
+                transition: transform 0.2s ease-in-out;
+                &:hover {
+                    transform: scale(1.1);
+                }
+            }
         }
     }
     @media screen and (max-width: 1024px) {
@@ -47,6 +91,10 @@ const aboutContent = about.blocks;
                 order: 1;
                 grid-column: 1 / span 2;
             }
+            .socials {
+                order: 3;
+                grid-column: 3 / span 2;
+            }
         }
     }
     @media screen and (max-width: 768px) {
@@ -60,6 +108,11 @@ const aboutContent = about.blocks;
             .profile {
                 order: 1;
                 grid-column: 1 / span 1;
+            }
+            .socials {
+                order: 3;
+                grid-column: 1 / span 1;
+                gap: 33px;
             }
         }
     }
