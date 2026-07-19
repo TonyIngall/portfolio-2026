@@ -30,7 +30,7 @@ import Insights from '../components/insights/list.astro';
             <p>Focusing on Motion & Accessibility.</p>
             <p>Based in Cambridgeshire.</p>
         </div>
-        <div id="insights">
+        <div class="insights">
             <h2>Insights</h2>
             <Insights limit={3} />
         </div>
@@ -108,7 +108,7 @@ import Insights from '../components/insights/list.astro';
             }
         }
 
-        #insights {
+        .insights {
             order: 2;
             grid-column: 6 / span 4;
             grid-row: 2 / span 1;
@@ -198,7 +198,7 @@ import Insights from '../components/insights/list.astro';
                 }
             }
 
-            #insights {
+            .insights {
                 grid-column: 1 / span 5;
                 grid-row: 3 / span 1;
             }
@@ -246,7 +246,8 @@ import Insights from '../components/insights/list.astro';
                     }
                 }
             }
-            #insights {
+            .insights {
+                display: none;
                 grid-column: 1 / span 1;
                 ul li a {
                     grid-template-areas:
