@@ -1,5 +1,6 @@
 ---
 import Icon from "./Icon.astro"
+import Insights from '../insights/list.astro';
 ---
 
 <header>
@@ -30,6 +31,10 @@ import Icon from "./Icon.astro"
                     <li><a href="/">Home</a></li>
                     <li><a href="/insights">Insights</a></li>
                 </ul>
+            </div>
+            <div class="insights">
+                <p>Latest Insights</p>
+                <Insights limit={3} />
             </div>
             <div id="contact">
                 <p>Say <a href="mailto:hello@tonyingall.com">Hello<span>@tonyingall.com</span></a></p>
@@ -129,6 +134,9 @@ import Icon from "./Icon.astro"
                     }
                 }
             }
+            .insights {
+                display: none;
+            }
             #contact {
                 grid-area: contact;
                 font-family: 'PP-Editorial-New-Ultrabold', sans-serif;
@@ -212,13 +220,15 @@ import Icon from "./Icon.astro"
                 max-height: calc(100vh - 30px - var(--header-height));
                 max-width: calc(100vw - 30px);
                 .nav-inner {
-                    grid-template-rows: 1fr auto auto;
+                    grid-template-rows: auto 1fr auto auto;
                     grid-template-areas:
                         "pages"
+                        "insights"
                         "contact"
                         "socials";
                     row-gap: 15px;
                     height: calc(100vh - 150px);
+                    min-width: calc(100vw - 60px);
                     padding: 33px 15px;
                 }
                 #pages {
@@ -228,6 +238,41 @@ import Icon from "./Icon.astro"
                     ul {
                         flex-flow: column nowrap;
                         gap: 15px;
+                    }
+                }
+                .insights {
+                    grid-area: insights;
+                    display: flex;
+                    flex-flow: column nowrap;
+                    justify-content: center;
+                    p {
+                        text-transform: uppercase;
+                        font-family: 'PP-Editorial-New-Ultrabold', sans-serif;
+                        font-size: 1.5rem;
+                    }
+                    ul {
+                        display: flex;
+                        flex-flow: column nowrap;
+                        gap: 15px;
+                        li a {
+                            display: grid;
+                            grid-template-areas:
+                                "title categories" 
+                                "series series";
+                            grid-template-columns: 1fr auto;
+                            gap: 6px;
+                            align-items: center;
+                            .title {
+                                grid-area: title;
+                            }
+                            .categories {
+                                grid-area: categories;
+                            }
+                            .series {
+                                grid-area: series;
+                                width: fit-content;
+                            }
+                        }
                     }
                 }
                 #contact {
