@@ -272,6 +272,7 @@ import Insights from '../components/insights/list.astro';
                 z-index: 1;
                 svg {
                     width: 50vw;
+                    animation: unset;
                 }
             }
             #info {
@@ -320,3 +321,59 @@ import Insights from '../components/insights/list.astro';
         }
     }
 </style>
+
+<script>
+    import { gsap } from 'gsap';
+
+    const mm = gsap.matchMedia();
+    mm.add("(max-width: 768px)", () => {
+        const star = document.getElementById('star');
+        if (!star) return;
+
+        const BASE_SPEED = 2.44;
+        let rotation = 0;
+        let velocity = BASE_SPEED;
+
+        const tick = () => {
+            velocity += (BASE_SPEED - velocity) * 0.02;
+            rotation += velocity;
+            gsap.set(star, { rotateY: rotation });
+        };
+        gsap.ticker.add(tick);
+
+        let lastX = 0;
+        let lastTime = 0;
+        let touching = false;
+
+        const handleTouchStart = (e) => {
+            lastX = e.touches[0].clientX;
+            lastTime = e.timeStamp;
+            touching = true;
+        };
+
+        const handleTouchMove = (e) => {
+            if (!touching) return;
+            const currentX = e.touches[0].clientX;
+            const dt = Math.max(e.timeStamp - lastTime, 1);
+            const pixelsPerMs = (currentX - lastX) / dt;
+            velocity += pixelsPerMs * 16.67 * 0.25;
+            lastX = currentX;
+            lastTime = e.timeStamp;
+        };
+
+        const handleTouchEnd = () => {
+            touching = false;
+        };
+
+        star.addEventListener('touchstart', handleTouchStart, { passive: true });
+        star.addEventListener('touchmove', handleTouchMove, { passive: true });
+        star.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+        return () => {
+            gsap.ticker.remove(tick);
+            star.removeEventListener('touchstart', handleTouchStart);
+            star.removeEventListener('touchmove', handleTouchMove);
+            star.removeEventListener('touchend', handleTouchEnd);
+        };
+    });
+</script>
