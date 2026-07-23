@@ -30,7 +30,7 @@ const articles = response.data;
                     </div>
                 )}
                 {hasSeries && article.series && <span class="series" style={`--series-color: ${article.series.colour.hex}`}>{article.series?.title}</span>}
-                {isNew && <div class="new"><span>New</span></div>}
+                {isNew && <new-insight-icon class="new"><span>New</span></new-insight-icon>}
             </a>
         </li>
         )
@@ -113,23 +113,30 @@ const articles = response.data;
 <script>
     import { gsap } from 'gsap';
 
-    const n = document.querySelectorAll('.new');
-    n.forEach((el) => {
-        const tl = gsap.timeline({ repeat: 0, yoyo: false });
-        const rotateTl = gsap.timeline({ repeat: -1, yoyo: false, repeatDelay: 0.66 });
-        tl.to(el, {
-            scale: 1,
-            rotate: -15,
-            duration: 0.33,
-            delay: 0.66,
-            ease: 'back.out(1.7)',
-        });
-        rotateTl.fromTo(el.querySelector('span'), {
-            xPercent: -115,
-        }, {
-            xPercent: 115,
-            duration: 1.23,
-            ease: 'linear',
-        });
+    customElements.define('new-insight-icon', class extends HTMLElement {
+        constructor() {
+            super();
+        }
+        connectedCallback() {
+            const root = this;
+
+            const tl = gsap.timeline({ repeat: 0, yoyo: false });
+            const rotateTl = gsap.timeline({ repeat: -1, yoyo: false, repeatDelay: 0.66 });
+
+            tl.to(root, {
+                scale: 1,
+                rotate: -15,
+                duration: 0.33,
+                delay: 0.66,
+                ease: 'back.out(1.7)',
+            });
+            rotateTl.fromTo(root.querySelector('span'), {
+                xPercent: -115,
+            }, {
+                xPercent: 115,
+                duration: 1.23,
+                ease: 'linear',
+            });
+        }
     });
 </script>
