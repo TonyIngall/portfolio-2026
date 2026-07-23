@@ -57,7 +57,7 @@ import Header from '../components/ui/header.astro';
 	}
 
 </style>
-<script data-swup-ignore-script>
+<script>
 	import Lenis from 'lenis';
 	import 'lenis/dist/lenis.css';
 	import gsap from 'gsap';
@@ -121,11 +121,11 @@ import Header from '../components/ui/header.astro';
 	const swup = new Swup({
 		containers: ['#swup'],
 		plugins: [
+			new SwupHeadPlugin(),
+			new SwupScriptsPlugin(),
 			new SwupJsPlugin({
 				animations: anims,
-			}),
-			new SwupHeadPlugin(),
-			new SwupScriptsPlugin()
+			})
 		]
 	});
 </script>
