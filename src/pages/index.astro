@@ -7,7 +7,7 @@ import Insights from '../components/insights/list.astro';
     <article id="home">
         <div id="title">
             <h1>Creative <svg
-                id="star"
+                class="star"
                 xmlns="http://www.w3.org/2000/svg"
                 width="40"
                 height="40"
@@ -24,6 +24,26 @@ import Insights from '../components/insights/list.astro';
                     stroke-width="8"
                 />
             </svg> Developer</h1>
+        </div>
+        <div id="star">
+            <svg
+                class="star"
+                xmlns="http://www.w3.org/2000/svg"
+                width="40"
+                height="40"
+                viewBox="0 0 107.98 136.546"
+                aria-hidden="true"
+            >
+                <path
+                    d="M49.99,0l3.971,18.953A57.132,57.132,0,0,0,91.189,61.231l8.791,3.042-8.791,3.042a57.132,57.132,0,0,0-37.228,42.277L49.99,128.546,46.02,109.593A57.132,57.132,0,0,0,8.791,67.315L0,64.273l8.791-3.042A57.132,57.132,0,0,0,46.02,18.953Z"
+                    transform="translate(4 4)"
+                    fill="var(--color-primary)"
+                    stroke="var(--color-primary)"
+                    stroke-linecap="square"
+                    stroke-linejoin="round"
+                    stroke-width="8"
+                />
+            </svg>
         </div>
         <div id="info">
             <p>Developer since 2020.</p>
@@ -59,6 +79,13 @@ import Insights from '../components/insights/list.astro';
         height: 100vh;
         overflow: hidden;
 
+        svg.star {
+            margin-top: -0.5rem;
+            width: 8vw;
+            height: auto;
+            animation: star-spin 1.23s ease-in-out infinite;
+        }
+
         #title {
             grid-column: 1 / span 9;
             grid-row: 3 / span 1;
@@ -76,13 +103,11 @@ import Insights from '../components/insights/list.astro';
                 margin: 1.25rem 0 0 0;
                 position: relative;
                 z-index: 1;
-                svg {
-                    margin-top: -0.5rem;
-                    width: 8vw;
-                    height: auto;
-                    animation: star-spin 1.23s ease-in-out infinite;
-                }
             }
+        }
+
+        #star {
+            display: none;
         }
 
         #info {
@@ -178,14 +203,15 @@ import Insights from '../components/insights/list.astro';
             grid-template-rows: auto;
             padding: 0 15px;
 
+            svg.star  {
+                width: 10vw;
+            }
+
             #title {
                 grid-column: 1 / span 5;
                 grid-row: 3 / span 1;
                 h1 {
                     font-size: min(13.5vw, 8.5rem);
-                    svg {
-                        width: 10vw;
-                    }
                 }
             }
 
@@ -216,13 +242,28 @@ import Insights from '../components/insights/list.astro';
         #home {
             grid-template-columns: 1fr;
             height: 100dvh;
+            svg.star {
+                width: 10vw;
+            }
             #title {
                 grid-column: 1 / span 1;
+                grid-row: 4 / span 1;
                 h1 {
                     font-size: max(13.5vw, 2.5rem);
                     svg {
-                        width: 10vw;
+                        display: none;
                     }
+                }
+            }
+            #star {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                grid-column: 1 / span 1;
+                grid-row: 3 / span 1;
+                z-index: 1;
+                svg {
+                    width: 50vw;
                 }
             }
             #info {
