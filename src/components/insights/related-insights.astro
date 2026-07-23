@@ -10,10 +10,11 @@ const curArticle = curResponse.data[0] as Article;
 const a = [];
 
 // 1. Get by series
-const seriesResponse = await fetch(api + `articles?filters[series][id][$eq]=${curArticle.series?.id}&filters[slug][$ne]=${slug}&sort=publishedAt:desc&pagination[limit]=3&populate[categories][populate][0]=colour&populate[series][populate][0]=colour`).then((response) => response.json()) as ArticlesResponse;
-const seriesArticles = seriesResponse.data as Article[];
-a.push(...seriesArticles);
-
+if(curArticle.series) {
+    const seriesResponse = await fetch(api + `articles?filters[series][id][$eq]=${curArticle.series?.id}&filters[slug][$ne]=${slug}&sort=publishedAt:desc&pagination[limit]=3&populate[categories][populate][0]=colour&populate[series][populate][0]=colour`).then((response) => response.json()) as ArticlesResponse;
+    const seriesArticles = seriesResponse.data as Article[];
+    a.push(...seriesArticles);
+}
 // 2. Get by categories
 if(a.length < 3 && curArticle.categories && curArticle.categories.length > 0) {
     const categoryIds = curArticle.categories.map((category: Category) => category.id);
