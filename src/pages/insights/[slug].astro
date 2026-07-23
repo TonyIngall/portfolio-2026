@@ -4,6 +4,7 @@ import RichText from '../../components/content/RichText.astro';
 import CopyLink from '../../components/insights/copy-link.astro';
 import NextInsight from '../../components/insights/next-insight.astro';
 import RelatedInsights from '../../components/insights/related-insights.astro';
+import PreviousInsights from '../../components/insights/previous-insights.astro';
 import Icon from '../../components/ui/Icon.astro';
 import type { Article, ArticlesResponse, Category } from '../../types/articles';
 
@@ -31,6 +32,18 @@ const article = response.data[0];
 const { slug } = Astro.params;
 const site_url = import.meta.env.PUBLIC_SITE_URL
 const url = `${site_url}/insights/${slug}`;
+
+const hasRelatedInsights = async () => {
+    if(article.series) {
+        const seriesResponse = await fetch(api + `articles?filters[series][id][$eq]=${article.series?.id}&filters[slug][$ne]=${slug}&sort=publishedAt:desc&pagination[limit]=3&populate[categories][populate][0]=colour&populate[series][populate][0]=colour`).then((response) => response.json()) as ArticlesResponse;
+        const seriesArticles = seriesResponse.data as Article[];
+        if(seriesArticles.length > 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
 ---
 <Layout title={article.title} description={article.description}>
     <article id="insight">
@@ -107,7 +120,9 @@ const url = `${site_url}/insights/${slug}`;
             </div>
         </section>
         <NextInsight slug={slug} />
-        <RelatedInsights slug={slug} />
+        {await hasRelatedInsights() ? (
+            <RelatedInsights curArticle={article} slug={slug} />
+        ) : <PreviousInsights slug={slug} />}
     </div>
 </Layout>
 
