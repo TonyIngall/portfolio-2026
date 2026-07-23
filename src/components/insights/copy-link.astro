@@ -1,0 +1,217 @@
+---
+const { link } = Astro.props;
+---
+
+<copy-button class="copy-link" data-copy-link data-copy-url={link}>
+    <button type="button" class="copy-link-button" data-copy-button>
+        <span data-copy-text>Copy Link</span>
+    </button>
+
+    <svg
+        class="copy-link-star"
+        data-copy-star
+        xmlns="http://www.w3.org/2000/svg"
+        width="40"
+        height="40"
+        viewBox="0 0 107.98 136.546"
+        aria-hidden="true"
+    >
+        <path
+            d="M49.99,0l3.971,18.953A57.132,57.132,0,0,0,91.189,61.231l8.791,3.042-8.791,3.042a57.132,57.132,0,0,0-37.228,42.277L49.99,128.546,46.02,109.593A57.132,57.132,0,0,0,8.791,67.315L0,64.273l8.791-3.042A57.132,57.132,0,0,0,46.02,18.953Z"
+            transform="translate(4 4)"
+            fill="var(--color-primary)"
+            stroke="var(--color-primary)"
+            stroke-linecap="square"
+            stroke-linejoin="round"
+            stroke-width="8"
+        />
+    </svg>
+</copy-button>
+
+<script>
+
+    import { gsap } from 'gsap';
+    import { SplitText } from 'gsap/SplitText';
+
+    gsap.registerPlugin(SplitText);
+
+    customElements.define('copy-button', class extends HTMLElement {
+        constructor() {
+            super();
+        }
+        connectedCallback() {
+            const root = this;
+
+            const getRootUrl = (root: HTMLElement) => {
+                return root.getAttribute('data-copy-url') || window.location.href;
+            };
+            const setupCopyLink = (root: HTMLElement) => {
+                if (!root) return;
+
+                const button = root.querySelector<HTMLButtonElement>('[data-copy-button]');
+                const text = root.querySelector<HTMLSpanElement>('[data-copy-text]');
+                const starTemplate = root.querySelector<SVGSVGElement>('[data-copy-star]');
+
+                if (!button || !text || !starTemplate) return;
+
+                let isTweening = false;
+                const url = getRootUrl(root);
+
+                const handleCopy = async () => {
+                    if (isTweening) return;
+
+                    isTweening = true;
+
+                    try {
+                        await navigator.clipboard.writeText(url);
+                    } catch {
+                        isTweening = false;
+                        return;
+                    }
+
+                    const starCount = 5;
+                    const radius = 66;
+                    const buttonRect = button.getBoundingClientRect();
+                    const centerX = buttonRect.width / 2;
+                    const centerY = buttonRect.height / 2;
+
+                    for (let i = 0; i < starCount; i += 1) {
+                        const clone = starTemplate.cloneNode(true) as SVGSVGElement;
+                        clone.classList.add('is-active');
+                        clone.removeAttribute('data-copy-star');
+                        root.appendChild(clone);
+
+                        const angle = (360 / starCount) * i;
+
+                        clone.style.position = 'absolute';
+                        clone.style.left = centerX - 20 + 'px';
+                        clone.style.top = centerY - 20 + 'px';
+                        gsap.set(clone, { opacity: 0, transformOrigin: 'center' });
+
+                        const copyTl = gsap.timeline();
+
+                        const split = new SplitText(text, { type: 'chars' });
+                        copyTl.to(split.chars, {
+                            x: (index) => {
+                                const centre = Math.floor(split.chars.length / 2);
+                                const offset = centre - index;
+                                return offset * 10;
+                            },
+                            opacity: 0,
+                            duration: 0.33,
+                            ease: 'expo.in',
+                            scale: 0.66,
+                            onComplete: () => {
+                                split.revert();
+                                gsap.set(text, { opacity: 0, scale: 1 });
+                                text.textContent = 'Copied!';
+                            }
+                        }, 0);
+
+                        copyTl.to(clone, { delay: 0.33, opacity: 1, scale: 1, duration: 0.66, ease: 'power2.out' });
+
+                        copyTl.to(clone, {
+                            x: Math.cos(angle * (Math.PI / 180)) * radius,
+                            y: Math.sin(angle * (Math.PI / 180)) * radius,
+                            duration: 0.33,
+                            ease: 'expo.out'
+                        }, '<');
+
+                        copyTl.to(clone, {
+                            rotationY: 180,
+                            opacity: 0,
+                            duration: 0.33
+                        }, '<+0.45');
+
+                        copyTl.to(text, {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.33,
+                            ease: 'expo.out'
+                        }, '>-0.78');
+
+                        copyTl.to(text, {
+                            opacity: 0,
+                            duration: 0.3,
+                            ease: 'power2.out',
+                            onStart: () => {
+                                clone.remove();
+                            },
+                            onComplete: () => {
+                                text.textContent = 'Copy Link';
+                                gsap.to(text, {
+                                    opacity: 1,
+                                    duration: 0.3,
+                                    ease: 'power2.out',
+                                    onComplete: () => {
+                                        if (i === starCount - 1) {
+                                            isTweening = false;
+                                        }
+                                    }
+                                });
+                            }
+                        }, '+=1');
+                    }
+                };
+
+                button.addEventListener('click', handleCopy);
+
+                return () => {
+                    button.removeEventListener('click', handleCopy);
+                };
+            };
+
+            const initCopyLinks = () => {
+                document.querySelectorAll<HTMLElement>('[data-copy-link]').forEach((root) => {
+                    if(root.dataset.initialized) return;
+                    root.dataset.initialized = 'true';
+                    setupCopyLink(root);
+                });
+            }
+
+            document.addEventListener('astro:page-load', initCopyLinks);
+            initCopyLinks();
+        }
+    });
+</script>
+
+<style>
+    .copy-link {
+        position: relative;
+        width: fit-content;
+        .copy-link-button {
+            cursor: pointer;
+            line-height: 1;
+            letter-spacing: -0.33px;
+            text-transform: uppercase;
+            background: var(--color-light);
+            color: var(--color-dark);
+            border: 1px solid var(--color-dark);
+            border-radius: 999px;
+            min-width: 14rem;
+            padding: 15px 33px;
+            span {
+                display: inline-block;
+                font-size: 26px;
+            }
+        }
+        .copy-link-star {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0;
+            &.is-active {
+                opacity: 1;
+            }
+        }
+    }
+
+    @media screen and (max-width: 1024px) {
+        .copy-link-button {
+            min-width: auto;
+            width: 100%;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+    }
+</style>

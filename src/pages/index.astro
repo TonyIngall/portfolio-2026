@@ -1,63 +1,125 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Insights from '../components/home/insights.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Insights from '../components/insights/list.astro';
 ---
 
-<Layout>
-    <main id="home">
+<Layout title="Home" description="Creative Developer based in Cambridgeshire, specialising in Motion & Accessibility.">
+    <article id="home">
         <div id="title">
-            <h1>Creative Developer</h1>
+            <h1>Creative <svg
+                class="star"
+                xmlns="http://www.w3.org/2000/svg"
+                width="40"
+                height="40"
+                viewBox="0 0 107.98 136.546"
+                aria-hidden="true"
+            >
+                <path
+                    d="M49.99,0l3.971,18.953A57.132,57.132,0,0,0,91.189,61.231l8.791,3.042-8.791,3.042a57.132,57.132,0,0,0-37.228,42.277L49.99,128.546,46.02,109.593A57.132,57.132,0,0,0,8.791,67.315L0,64.273l8.791-3.042A57.132,57.132,0,0,0,46.02,18.953Z"
+                    transform="translate(4 4)"
+                    fill="var(--color-primary)"
+                    stroke="var(--color-primary)"
+                    stroke-linecap="square"
+                    stroke-linejoin="round"
+                    stroke-width="8"
+                />
+            </svg> Developer</h1>
+        </div>
+        <div id="star">
+            <svg
+                class="star"
+                xmlns="http://www.w3.org/2000/svg"
+                width="40"
+                height="40"
+                viewBox="0 0 107.98 136.546"
+                aria-hidden="true"
+            >
+                <path
+                    d="M49.99,0l3.971,18.953A57.132,57.132,0,0,0,91.189,61.231l8.791,3.042-8.791,3.042a57.132,57.132,0,0,0-37.228,42.277L49.99,128.546,46.02,109.593A57.132,57.132,0,0,0,8.791,67.315L0,64.273l8.791-3.042A57.132,57.132,0,0,0,46.02,18.953Z"
+                    transform="translate(4 4)"
+                    fill="var(--color-primary)"
+                    stroke="var(--color-primary)"
+                    stroke-linecap="square"
+                    stroke-linejoin="round"
+                    stroke-width="8"
+                />
+            </svg>
         </div>
         <div id="info">
             <p>Developer since 2020.</p>
             <p>Focusing on Motion & Accessibility.</p>
             <p>Based in Cambridgeshire.</p>
         </div>
-        <div id="insights">
+        <div class="insights">
             <h2>Insights</h2>
-            <Insights />
+            <Insights limit={3} />
         </div>
-    </main>
+        <div id="pattern">
+            <div class="grid"></div>
+        </div>
+    </article>
 </Layout>
 
 <style>
+    @keyframes star-spin {
+        0% {
+            transform: rotateY(0deg);
+        }
+        100% {
+            transform: rotateY(180deg);
+        }
+    }
     /* ═════ Desktop ═════ */
     #home {
         display: grid;
         grid-template-columns: repeat(9, 1fr);
-        grid-template-rows: 1fr auto 4fr;
+        grid-template-rows: auto 1fr;
         gap: 15px;
         padding: 0 33px;
         height: 100vh;
+        overflow: hidden;
+
+        svg.star {
+            margin-top: -0.5rem;
+            width: 8vw;
+            height: auto;
+            animation: star-spin 1.23s ease-in-out infinite;
+        }
 
         #title {
             grid-column: 1 / span 9;
-            grid-row: 3 / span 1;
+            grid-row: 2 / span 1;
             align-self: end;
             order: 99;
             h1 {
                 display: flex;
                 flex-flow: row wrap;
+                align-items: flex-start;
                 font-size: 11.5vw;
                 line-height: 0.85;
                 font-family: 'PP-Editorial-New-Ultrabold';
                 text-transform: uppercase;
                 color: var(--color-dark);
                 margin: 1.25rem 0 0 0;
+                position: relative;
+                z-index: 1;
             }
+        }
+
+        #star {
+            display: none;
         }
 
         #info {
             order: 1;
             grid-column: 1 / span 5;
-            grid-row: 2 / span 1;
+            grid-row: 1 / span 1;
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 15px;
+            padding-top: calc(50px + var(--header-height, 77px));
             p {
+                display: block;
                 font-size: 1.5rem;
                 &:nth-child(1) {
                     grid-column: 1 / span 2;
@@ -72,37 +134,66 @@ import Insights from '../components/home/insights.astro';
             }
         }
 
-        #info {
-            order: 1;
-            grid-column: 1 / span 5;
-            grid-row: 2 / span 1;
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
-            p {
-                font-size: 1.5rem;
-                &:nth-child(1) {
-                    grid-column: 1 / span 2;
-                }
-                &:nth-child(2) {
-                    grid-column: 3 / span 2;
-                }
-                &:nth-child(3) {
-                    grid-column: 1 / span 2;
-                    grid-row: 2 / span 1;
-                }
-            }
-        }
-
-        #insights {
+        .insights {
             order: 2;
             grid-column: 6 / span 4;
-            grid-row: 2 / span 1;
+            grid-row: 1 / span 1;
+            z-index: 1;
+            padding-top: calc(50px + var(--header-height, 77px));
             h2 {
                 font-family: 'PP-Editorial-New-Ultrabold';
                 text-transform: uppercase;
                 font-size: 1.5rem;
                 line-height: 1;
+            }
+            ul {
+                display: flex;
+                flex-flow: column nowrap;
+                gap: 15px;
+                li a {
+                    display: grid;
+                    grid-template-areas:
+                        "title categories" 
+                        "series series";
+                    grid-template-columns: 1fr auto;
+                    gap: 6px;
+                    align-items: center;
+                    .title {
+                        grid-area: title;
+                    }
+                    .categories {
+                        grid-area: categories;
+                    }
+                    .series {
+                        grid-area: series;
+                        width: fit-content;
+                    }
+                }
+            }
+        }
+
+        #pattern {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            .grid {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                width: 50%;
+                aspect-ratio: 1/1;
+                transform: translate(25%, 40%);
+                border-radius: 100%;
+                box-shadow: inset 0 0 33px var(--color-light);
+                background-image: 
+                    linear-gradient(to right, #312b3614 1px, transparent 1px),
+                    linear-gradient(to bottom, #312b3614 1px, transparent 1px);
+                background-size: 33px 33px;
+                background-position: center;
             }
         }
     }
@@ -114,6 +205,10 @@ import Insights from '../components/home/insights.astro';
             grid-template-rows: auto;
             padding: 0 15px;
 
+            svg.star  {
+                width: 10vw;
+            }
+
             #title {
                 grid-column: 1 / span 5;
                 grid-row: 3 / span 1;
@@ -124,16 +219,28 @@ import Insights from '../components/home/insights.astro';
 
             #info {
                 grid-column: 1 / span 5;
-                grid-row: 2 / span 1;
+                grid-row: 1 / span 1;
                 grid-template-columns: repeat(5, 1fr);
                 p:nth-child(2) {
                     grid-column: 4 / span 2;
                 }
             }
 
-            #insights {
+            .insights {
                 grid-column: 1 / span 5;
-                grid-row: 3 / span 1;
+                grid-row: 2 / span 1;
+                .new {
+                    top: calc(-100% - 15px);
+                    right: 0px;
+                    left: unset;
+                }
+            }
+
+            #pattern {
+                .grid {
+                    width: 66%;
+                    transform: translate(12.5%, 25%);
+                }
             }
         }
     }
@@ -141,11 +248,73 @@ import Insights from '../components/home/insights.astro';
     @media screen and (max-width: 768px) {
         #home {
             grid-template-columns: 1fr;
-
+            grid-template-rows: auto 1fr auto;
+            height: 100dvh;
+            svg.star {
+                width: 10vw;
+            }
             #title {
-                grid-column: 3 / span 1;
+                grid-column: 1 / span 1;
+                grid-row: 3 / span 1;
                 h1 {
-                    font-size: min(11.5vw, 5.5rem);
+                    font-size: max(13.5vw, 2.5rem);
+                    svg {
+                        display: none;
+                    }
+                }
+            }
+            #star {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                grid-column: 1 / span 1;
+                grid-row: 2 / span 1;
+                z-index: 1;
+                svg {
+                    width: 50vw;
+                }
+            }
+            #info {
+                grid-row: 1 / span 1;
+                grid-column: 1 / span 1;
+                grid-template-columns: 1fr 1fr;
+                gap: 33px;
+                padding-top: calc(50px + var(--header-height));
+                p {
+                    &:nth-child(1) {
+                        grid-column: 1 / span 1;
+                        grid-row: 1 / span 1;
+                        font-size: 1.15rem;
+                    }
+                    &:nth-child(2) {
+                        grid-column: 1 / span 2;
+                        grid-row: 3 / span 1;
+                    }
+                    &:nth-child(3) {
+                        grid-column: 2 / span 1;
+                        grid-row: 1 / span 1;
+                        text-align: right;
+                        font-size: 1.15rem;
+                    }
+                }
+            }
+            .insights {
+                display: none;
+                grid-column: 1 / span 1;
+                padding-top: 0px;
+                ul li a {
+                    grid-template-areas:
+                        "title"
+                        "categories"
+                        "series";
+                    grid-template-columns: 1fr;
+                }
+            }
+            #pattern {
+                .grid {
+                    right: 50%;
+                    width: 100%;
+                    transform: translate(50%, 33%);
                 }
             }
         }

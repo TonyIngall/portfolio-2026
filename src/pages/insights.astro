@@ -1,0 +1,120 @@
+---
+import Layout from '../layouts/Layout.astro';
+import List from '../components/insights/list.astro';
+import Bio from '../components/about/bio.astro';
+---
+
+<Layout title="Insights" description="Thoughts and insights on Motion, Accessibility, and Web Development.">
+    <main id="insights">
+        <h1>Insights</h1>
+        <List hasDate />
+        <Bio />
+    </main>
+</Layout>
+
+<style>
+    #insights {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 15px;
+        margin-top: calc(var(--header-height) + 50px);
+        h1 {
+            grid-column: 2 / span 5;
+            font-size: 11.5vw;
+            font-family: 'PP-Editorial-New-Ultrabold';
+            text-align: center;
+            text-transform: uppercase;
+            color: var(--color-dark);
+        }
+        ul {
+            grid-column: 2 / span 5;
+            li {
+                &:not(:last-child) {
+                    padding-bottom: 15px;
+                    border-bottom: 1px solid var(--color-accent);
+                    margin-bottom: 15px;
+                }
+                .title {
+                    flex-grow: 1;
+                }
+                .categories {
+                    display: flex;
+                    gap: 15px;
+                }
+            }
+        }
+        #bio {
+            grid-column: 1 / span 7;
+            padding: 100px 0px;
+            box-shadow: inset 0px 33px 66px 0px var(--color-light),
+                inset 0px -33px 66px 0px var(--color-light);
+            background-image: 
+                linear-gradient(to right, #312b3614 1px, transparent 1px),
+                linear-gradient(to bottom, #312b3614 1px, transparent 1px);
+            background-size: 33px 33px;
+            background-position: center;
+            .description {
+                h2 {
+                    font-family: 'PP-Editorial-New-Ultrabold';
+                    font-size: max(2.5rem, 3vw);
+                    text-transform: uppercase;
+                    color: var(--color-dark);
+                }
+            }
+        }
+    }
+    @media screen and (max-width: 1024px) {
+        #insights {
+            grid-template-columns: repeat(5, 1fr);
+            padding: 50px 15px;
+            h1 {
+                font-size: 11.5vw;
+                grid-column: 1 / span 5;
+            }
+            ul {
+                grid-column: 1 / span 5;
+                a {
+                    align-items: flex-start;
+                    flex-flow: column nowrap;
+                }
+            }
+            #bio {
+                grid-column: 1 / span 5;
+                .description {
+                    h2 {
+                        font-size: max(2rem, 5vw);
+                    }
+                }
+            }
+        }
+    }
+    @media screen and (max-width: 768px) {
+        #insights {
+            grid-template-columns: repeat(1, 1fr);
+            padding: 25px 15px;
+            h1 {
+                font-size: 15vw;
+                grid-column: 1 / span 1;
+            }
+            ul {
+                grid-column: 1 / span 1;
+                li {
+                    .title {
+                        font-size: 1.15rem;
+                    }
+                    .date {
+                        font-size: 0.85rem;
+                    }
+                }
+            }
+            #bio {
+                grid-column: 1 / span 1;
+                .description {
+                    h2 {
+                        font-size: max(2.5rem, 5vw);
+                    }
+                }
+            }
+        }
+    }
+</style>

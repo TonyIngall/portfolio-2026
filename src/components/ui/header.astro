@@ -1,0 +1,461 @@
+---
+import Icon from "./Icon.astro"
+import Insights from '../insights/list.astro';
+---
+
+<header>
+    <div id="pill">
+        <div id="pill-inner">
+            <div id="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48.164" height="60.912" viewBox="0 0 48.164 60.912">
+                    <g transform="translate(-918.64 -162.545)">
+                        <path d="M23.087-26.772c0,6.8-1.154,10.325-3.656,10.325-2.052,0-3.143-2.5-3.143-7.183V-41.908h7.247V-45.5h-7.5V-55.44h-3.72A12.326,12.326,0,0,1,.64-45.307v3.4H4.809v18.791C4.809-13.3,8.464-9.97,14.685-9.97c7.888,0,10.839-5.451,10.839-16.8ZM43.673-45.692l-1.8-1.475L27.319-41.331l.77,1.86c3.912-1.539,4.04-.385,4.04,4.489l.064,16.418c0,4.425-.962,5.708-5.195,5.708V-11H48.8v-1.86c-4.169,0-5.131-1.283-5.131-5.708Z" fill="currentColor" transform="translate(918 233.427)"/>
+                        <path d="M8.149,0,8.8,3.09a9.313,9.313,0,0,0,6.069,6.892l1.433.5-1.433.5A9.313,9.313,0,0,0,8.8,17.865l-.647,3.09L7.5,17.865a9.313,9.313,0,0,0-6.069-6.892L0,10.477l1.433-.5A9.313,9.313,0,0,0,7.5,3.09Z" transform="translate(947.222 163.545)" fill="currentColor" stroke="currentColor" stroke-linecap="square" stroke-linejoin="round" stroke-width="2"/>
+                    </g>
+                </svg>
+            </div>
+            <div id="menu-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="0" y1="4" x2="24" y2="4" stroke-width="2" stroke="#312B36"/>
+                    <line x1="0" y1="11" x2="24" y2="11" stroke-width="2" stroke="#312B36"/>
+                    <line x1="0" y1="18" x2="24" y2="18" stroke-width="2" stroke="#312B36"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+    <nav>
+        <div class="nav-inner">
+            <div id="pages">
+                <p>Pages</p>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/insights">Insights</a></li>
+                </ul>
+            </div>
+            <div class="insights">
+                <p>Latest Insights</p>
+                <Insights limit={3} />
+            </div>
+            <div id="contact">
+                <p>Say <a href="mailto:hello@tonyingall.com">Hello<span>@tonyingall.com</span></a></p>
+            </div>
+            <div id="socials">
+                <p>See also:</p>
+                <ul>
+                    <li><a href="https://www.linkedin.com/in/tony-ingall/">
+                        <span>LinkedIn</span>
+                        <Icon name="linkedin" />
+                    </a></li>
+                    <li><a href="https://www.github.com/tonyingall">
+                        <span>GitHub</span>
+                        <Icon name="github" />
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div id="nav-bg"></div>
+</header>
+<style>
+    header {
+        position: fixed;
+        top: 15px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        #pill {
+            margin: 0 auto;
+            width: 15vw;
+            min-width: 300px;
+            max-width: 66vw;
+            #pill-inner {
+                display: flex;
+                flex-flow: row nowrap;
+                align-items: center;
+                justify-content: space-between;
+                gap: 33px;
+                padding: 15px 33px;
+            }
+            #logo {
+                color: var(--color-dark);
+                width: 33px;
+                svg {
+                    width: 100%;
+                    height: auto;
+                }
+            }
+            #menu-icon {
+                position: relative;
+                cursor: pointer;
+                height: 24px;
+                svg {
+                    position: relative;
+                    line {
+                        transform-origin: center;
+                        will-change: transform, opacity;
+                    }
+                }
+            }
+        }
+        nav {
+            height: 0px;
+            width: 0px;
+            max-width: 66vw;
+            overflow: hidden;
+            .nav-inner {
+                display: grid;
+                grid-template-areas:
+                    "pages pages"
+                    "contact socials";
+                row-gap: 66px;
+                padding: 33px 33px 15px 33px;
+            }
+            #pages {
+                grid-area: pages;
+                p {
+                    margin-bottom: 15px;
+                }
+                ul {
+                    display: flex;
+                    flex-flow: row nowrap;
+                    gap: 15px;
+                    width: fit-content;
+                    padding: 0px;
+                    margin: 0px;
+                    li {
+                        list-style: none;
+                        > a {
+                            color: var(--color-dark);
+                            font-size: 1.5rem;
+                            text-decoration: none;
+                            &:visited {
+                                color: unset;
+                            }
+                        }
+                    }
+                }
+            }
+            .insights {
+                display: none;
+            }
+            #contact {
+                grid-area: contact;
+                font-family: 'PP-Editorial-New-Ultrabold', sans-serif;
+                text-transform: uppercase;
+                font-size: 3rem;
+                color: var(--color-dark);
+                a {
+                    display: inline-flex;
+                    flex-flow: column nowrap;
+                    color: var(--color-primary);
+                    text-decoration: none;
+                    span {
+                        margin-top: -15px;
+                        display: block;
+                        font-size: 1.5rem;
+                    }
+                }
+            }
+            #socials {
+                grid-area: socials;
+                display: flex;
+                flex-flow: row nowrap;
+                justify-content: flex-end;
+                gap: 33px;
+                ul {
+                    display: flex;
+                    flex-flow: row nowrap;
+                    gap: 15px;
+                    width: fit-content;
+                    padding: 0px;
+                    margin: 0px;
+                    li {
+                        list-style: none;
+                        > a {
+                            color: var(--color-dark);
+                            font-size: 1.5rem;
+                            text-decoration: none;
+                            span {
+                                position: absolute;
+                                width: 1px;
+                                height: 1px;
+                                padding: 0;
+                                margin: -1px;
+                                overflow: hidden;
+                                clip: rect(0, 0, 0, 0);
+                                white-space: nowrap;
+                                border: 0;
+                            }
+                            svg {
+                                width: 66px;
+                            }
+                            &:visited {
+                                color: unset;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        #nav-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--color-light);
+            border-radius: 33px;
+            box-shadow: 0px 6px 6px 6px rgba(239, 229, 231, 0.66);
+            z-index: -1;
+        }
+    }
+
+    @media screen and (max-width: 1024px) {
+        header {
+            #pill {
+                min-width: 300px;
+                width: 33vw;
+                max-width: calc(100vw - 30px);
+            }
+        }
+    }
+    
+    @media screen and (max-width: 768px) {
+        header {
+            #pill {
+                min-width: 225px;
+                width: 45vw;
+                max-width: calc(100vw - 30px);
+            }
+            nav {
+                max-height: calc(100vh - 30px - var(--header-height));
+                max-width: calc(100vw - 30px);
+                .nav-inner {
+                    grid-template-rows: auto 1fr auto auto;
+                    grid-template-areas:
+                        "pages"
+                        "insights"
+                        "contact"
+                        "socials";
+                    row-gap: 15px;
+                    height: calc(100dvh - 175px);
+                    min-width: calc(100vw - 60px);
+                    padding: 33px 15px;
+                }
+                #pages {
+                    p {
+                        display: none;
+                    }
+                    ul {
+                        flex-flow: column nowrap;
+                        gap: 15px;
+                    }
+                }
+                .insights {
+                    grid-area: insights;
+                    display: flex;
+                    flex-flow: column nowrap;
+                    justify-content: center;
+                    p {
+                        text-transform: uppercase;
+                        font-family: 'PP-Editorial-New-Ultrabold', sans-serif;
+                        font-size: 1.5rem;
+                    }
+                    ul {
+                        display: flex;
+                        flex-flow: column nowrap;
+                        gap: 15px;
+                        li a {
+                            display: grid;
+                            grid-template-areas:
+                                "title categories" 
+                                "series series";
+                            grid-template-columns: 1fr auto;
+                            gap: 6px;
+                            align-items: center;
+                            .title {
+                                grid-area: title;
+                            }
+                            .categories {
+                                grid-area: categories;
+                            }
+                            .series {
+                                grid-area: series;
+                                width: fit-content;
+                            }
+                            .new {
+                                top: calc(-100% - 15px);
+                            }
+                        }
+                    }
+                }
+                #contact {
+                    font-size: 2.5rem;
+                    a > span {
+                        margin-top: -10px;
+                        font-size: 1.25rem;
+                    }
+                }
+                #socials {
+                    align-items: flex-end;
+                    flex-flow: column nowrap;
+                    p {
+                        display: none;
+                    }
+                    ul {
+                        gap: 15px;
+                    }
+                }
+            }
+        }
+    }
+</style>
+<script>
+    const setHeaderHeight = () => {
+        const pill = document.querySelector('header > div');
+        const headerHeight = pill ? pill.scrollHeight : 0;
+        document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
+    }
+    window.addEventListener('load', setHeaderHeight);
+    window.addEventListener('resize', setHeaderHeight);
+</script>
+<script>
+    import { gsap } from 'gsap';
+    const pill = document.querySelector('header > div');
+    const menuIcon = document.getElementById('menu-icon');
+    const nav = document.querySelector('nav');
+    const navInner = document.querySelector('nav .nav-inner');
+    let menuOpen: boolean = false,
+        menuTl: gsap.core.Timeline | null = null,
+        iconTl: gsap.core.Timeline | null = null;
+
+    const init = () => {
+        if(!pill || !menuIcon || !nav) return;
+        if(menuTl) menuTl.kill();
+        if(iconTl) iconTl.kill();
+
+        gsap.set(pill, { clearProps: 'width' });
+        gsap.set(nav, { clearProps: 'width,height,pointerEvents' });
+
+        const innerHeight = navInner ? navInner.scrollHeight : 0;
+        const lines = gsap.utils.toArray('#menu-icon line') as SVGLineElement[];
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        const navOffset = isMobile ? 0.5 : 0.33;
+        const closedPillWidth = getComputedStyle(pill).width;
+        const closedNavWidth = getComputedStyle(nav).width;
+        const closedNavHeight = getComputedStyle(nav).height;
+
+        gsap.set(lines, { clearProps: 'transform,opacity' });
+
+        // Icon Transformation
+        iconTl = gsap.timeline({ paused: true });
+        iconTl.to(lines, {
+            duration: 0.66,
+            ease: 'power4.out',
+            rotate: -66,
+            y: (i) => i === 0 ? 7 : i === 1 ? 0 : -7,
+            transformOrigin: 'center',
+        }, 0);
+        iconTl.to([lines[1], lines[2]], {
+            duration: 0.66,
+            ease: 'power4.out',
+            opacity: 0,
+        }, 0);
+
+        menuTl = gsap.timeline({ paused: true });
+        // Pill Expansion
+        menuTl.fromTo(pill, {
+            width: closedPillWidth,
+        }, {
+            duration: 0.66,
+            ease: 'power1.inOut',
+            width: '100vw',
+        }, 0);
+
+        // Nav Reveal
+        menuTl.fromTo(nav, {
+            width: closedNavWidth,
+            height: closedNavHeight,
+            pointerEvents: 'none',
+        }, {
+            duration: 0.66,
+            ease: 'power4.out',
+            width: '100vw',
+            height: `${innerHeight}px`,
+            pointerEvents: 'all',
+        }, navOffset);
+
+        // Keep visual state aligned with the logical menu state after every rebuild.
+        menuTl.progress(menuOpen ? 1 : 0);
+        iconTl.progress(menuOpen ? 1 : 0);
+    }
+    init();
+
+    window.addEventListener('resize', () => {
+        init();
+        if (!menuOpen) return;
+        const innerHeight = navInner ? navInner.scrollHeight : 0;
+        menuTl?.set(nav, { height: `${innerHeight}px` });
+    });
+
+    const closeMenu = (immediate: boolean = false) => {
+        if (!menuTl || !iconTl) {
+            menuOpen = false;
+            return;
+        }
+
+        if (immediate) {
+            menuTl.pause(0);
+            iconTl.pause(0);
+            menuOpen = false;
+            return;
+        }
+
+        menuTl.reverse();
+        iconTl.reverse();
+        menuOpen = false;
+    };
+
+    document.addEventListener('astro:before-preparation', () => {
+        closeMenu(false);
+    });
+
+    document.addEventListener('astro:before-swap', () => {
+        closeMenu(false);
+    });
+
+    document.addEventListener('astro:page-load', () => {
+        closeMenu(false);
+    });
+
+    const isInternalPageLink = (link: HTMLAnchorElement) => {
+        const href = link.getAttribute('href');
+        if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) {
+            return false;
+        }
+
+        const url = new URL(href, window.location.href);
+        return url.origin === window.location.origin;
+    };
+
+    nav?.addEventListener('click', (event) => {
+        const target = event.target as HTMLElement | null;
+        const link = target?.closest('a') as HTMLAnchorElement | null;
+        if (!link || !isInternalPageLink(link)) return;
+        closeMenu(false);
+    });
+
+    const toggleMenu = () => {
+        if (!menuTl || !iconTl) return;
+        if (menuOpen) {
+            closeMenu();
+            return;
+        }
+
+        menuTl.play();
+        iconTl.play();
+        menuOpen = true;
+    }
+
+    menuIcon ? menuIcon.addEventListener('click', toggleMenu) : null;
+</script>
