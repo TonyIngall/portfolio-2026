@@ -57,7 +57,7 @@ import Header from '../components/ui/header.astro';
 	}
 
 </style>
-<script>
+<script data-swup-ignore-script>
 	import Lenis from 'lenis';
 	import 'lenis/dist/lenis.css';
 	import gsap from 'gsap';
@@ -65,9 +65,10 @@ import Header from '../components/ui/header.astro';
 	import Swup from 'swup';
 	import SwupJsPlugin from '@swup/js-plugin';
 	import SwupHeadPlugin from '@swup/head-plugin';
+	import SwupScriptsPlugin from '@swup/scripts-plugin';
 	import { animateIn } from '../animations/insight-single';
 
-	let lenis: Lenis | null = null;
+	let lenis = null;
 
 	const initLenis = () => {
 		if (lenis) return lenis;
@@ -124,6 +125,7 @@ import Header from '../components/ui/header.astro';
 				animations: anims,
 			}),
 			new SwupHeadPlugin(),
+			new SwupScriptsPlugin()
 		]
 	});
 </script>
