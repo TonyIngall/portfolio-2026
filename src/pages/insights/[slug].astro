@@ -327,6 +327,21 @@ const hasRelatedInsights = async () => {
         }
     }
 
+    @media screen and (max-width: 1367px) {
+        #end {
+            grid-template-columns: repeat(2, 1fr);
+            column-gap: 33px;
+            section {
+                &#share {
+                    grid-column: 1 / span 1;
+                }
+                &#next, &#previous, &#related {
+                    grid-column: 2 / span 1;
+                }
+            }
+        }
+    }
+
     @media screen and (max-width: 1024px) {
         #insight {
             padding: 50px 15px;
