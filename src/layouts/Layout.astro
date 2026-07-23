@@ -46,7 +46,6 @@ import Header from '../components/ui/header.astro';
 	body {
 		margin: 0;
 		width: 100%;
-		height: 100%;
 		font-family: 'PP-Object-Sans-Regular', sans-serif;
 		background-color: var(--color-light);
 		h1,h2,h3,h4,h5,h6,p,span,a,li {
@@ -66,26 +65,30 @@ import Header from '../components/ui/header.astro';
 	import Swup from 'swup';
 	import SwupJsPlugin from '@swup/js-plugin';
 	import SwupHeadPlugin from '@swup/head-plugin';
-	import SwupScriptsPlugin from '@swup/scripts-plugin';
 	import { animateIn } from '../animations/insight-single';
 
-	// Lenis Init
-	const lenis = new Lenis({
-		smoothWheel: true,
-		syncTouch: true,
-		touchMultiplier: 1,
-		easing: (t) => Math.min(1, 1.001 - Math.pow(1 - t, 4)),
-	});
+	let lenis: Lenis | null = null;
 
-	lenis.on('scroll', (e) => {
-		ScrollTrigger.update;
-	});
+	const initLenis = () => {
+		if (lenis) return lenis;
 
-	gsap.ticker.add((time) => {
-		lenis.raf(time * 1000);
-	});
+		lenis = new Lenis({
+			smoothWheel: true,
+			syncTouch: true,
+			touchMultiplier: 1,
+			easing: (t) => Math.min(1, 1.001 - Math.pow(1 - t, 4)),
+		});
 
-	gsap.ticker.lagSmoothing(0);
+		lenis.on('scroll', () => {
+			ScrollTrigger.update();
+		});
+
+		gsap.ticker.add((time) => {
+			lenis?.raf(time * 1000);
+		});
+	}
+
+	initLenis();
 	
 	// Swup Animations
 	const anims = [
@@ -96,7 +99,7 @@ import Header from '../components/ui/header.astro';
 				await gsap.to('#swup', { opacity: 0, duration: 0.33 });
 			},
 			in: async () => {
-				lenis.scrollTo(0, { immediate: true });
+				lenis?.scrollTo(0, { immediate: true });
 				await animateIn();
 			}
 		},
@@ -107,7 +110,7 @@ import Header from '../components/ui/header.astro';
 				await gsap.to('#swup', { opacity: 0, duration: 0.33 });
 			},
 			in: async () => {
-				lenis.scrollTo(0, { immediate: true });
+				lenis?.scrollTo(0, { immediate: true });
 				await gsap.fromTo('#swup', { opacity: 0 }, { opacity: 1, duration: 0.33 });
 			}
 		}
@@ -121,7 +124,6 @@ import Header from '../components/ui/header.astro';
 				animations: anims,
 			}),
 			new SwupHeadPlugin(),
-			new SwupScriptsPlugin()
 		]
 	});
 </script>
