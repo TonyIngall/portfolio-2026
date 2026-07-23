@@ -241,13 +241,14 @@ import Insights from '../components/insights/list.astro';
     @media screen and (max-width: 768px) {
         #home {
             grid-template-columns: 1fr;
+            grid-template-rows: auto 1fr auto;
             height: 100dvh;
             svg.star {
                 width: 10vw;
             }
             #title {
                 grid-column: 1 / span 1;
-                grid-row: 4 / span 1;
+                grid-row: 3 / span 1;
                 h1 {
                     font-size: max(13.5vw, 2.5rem);
                     svg {
@@ -260,15 +261,18 @@ import Insights from '../components/insights/list.astro';
                 justify-content: center;
                 align-items: center;
                 grid-column: 1 / span 1;
-                grid-row: 3 / span 1;
+                grid-row: 2 / span 1;
                 z-index: 1;
                 svg {
                     width: 50vw;
                 }
             }
             #info {
+                grid-row: 1 / span 1;
                 grid-column: 1 / span 1;
                 grid-template-columns: 1fr 1fr;
+                gap: 33px;
+                padding-top: calc(50px + var(--header-height));
                 p {
                     &:nth-child(1) {
                         grid-column: 1 / span 1;
